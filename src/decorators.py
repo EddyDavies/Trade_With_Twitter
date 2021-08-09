@@ -60,7 +60,7 @@ def extract_env_vars():
     print(f"Date: {months_list[0]} to {months_list[-1]}  DBNames: {dbnames}")
     print(mongo_url)
 
-    return months_list, dbs, mongo
+    return months_list, dbs, mongo["bitcoin"], mongo
 
 
-months, dbs, mongo = extract_env_vars()
+months, dbs, db, mongo = extract_env_vars()
