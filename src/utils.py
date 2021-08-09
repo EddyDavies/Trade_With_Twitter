@@ -1,5 +1,4 @@
 import calendar
-import time
 from datetime import datetime, timedelta, timezone
 from typing import List
 
@@ -128,23 +127,12 @@ def get_month_array(month_range):
     return month_array
 
 
-if __name__ == "__main__":
-    print(get_date_array(get_date_range(["Jan 17"])))
-
-    # months = get_month_array(["Jan 18", "Jun 21"])
-
-
 def append_or_create_list(key: str, container: dict, content: dict):
     if key not in container:
         container[key] = [content]
     else:
         container[key].append(content)
     return container
-
-
-def search_for_day(day):
-    regex = f"^{day}*"
-    return db["tweets"].find({"created_at": {"$regex": regex}})
 
 
 def fix_array_misalignment(day):
@@ -158,3 +146,11 @@ def fix_array_misalignment(day):
         del buggy_tracker["starts"][-1]
 
     db["counts"].replace_one({"_id": day}, buggy_tracker)
+
+
+if __name__ == "__main__":
+    print(get_date_array(get_date_range(["Jan 17"])))
+
+    # months = get_month_array(["Jan 18", "Jun 21"])
+
+

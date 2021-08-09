@@ -1,0 +1,8 @@
+pymongo
+dnspython
+jupyter
+transformers
+torch
+pandas
+emoji
+nltk

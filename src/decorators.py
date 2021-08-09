@@ -1,7 +1,6 @@
 import json
 import os
 import time
-from functools import wraps
 from datetime import datetime, timedelta
 
 from pymongo import MongoClient
@@ -48,19 +47,20 @@ def minimum_execution_time(seconds=3, microseconds=1):
 
 
 def extract_env_vars():
-    m = os.environ.get("TWITTER_DATE").split(" ")
+    m = os.environ.get("TWITTER_DATE", "Apr 17 Aug 17").split(" ")
     months_list = list(map(' '.join, zip(m[::2], m[1::2])))
 
-    mongo_url = os.environ.get('MONGO_CLIENT')
+    mongo_url = os.environ.get('MONGO_CLIENT_DOWNLOAD', "mongodb://127.0.0.1:27000")
     mongo = MongoClient(mongo_url)
-    q = os.environ.get('TWITTER_QUERY')
-    dbname = os.environ.get('TWITTER_DBNAME')
-    # todo maybe change
+    dbnames = os.environ.get('DBNAMES', "bitcoin ethereum").split(" ")
+    dbs = [mongo["shared"]]
+    for name in dbnames:
+        dbs.append(mongo[name])
 
-    print(f"Query: {q}, DBName: {dbname}, Date: {months_list[0]} to {months_list[1]}")
+    print(f"Date: {months_list[0]} to {months_list[-1]}  DBNames: {dbnames}")
     print(mongo_url)
 
-    return months_list, q, mongo[dbname], mongo["shared"]
+    return months_list, dbs, mongo
 
 
-months, query, db, db_share = extract_env_vars()
+months, dbs, mongo = extract_env_vars()
