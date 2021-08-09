@@ -13,6 +13,8 @@ def find_days_docs(day, db):
 
 if __name__ == '__main__':
     # get a list of all the days in the
+    if not os.path.exists("../data"):
+            os.mkdir("../data")
     dates = get_date_array(get_date_range(months))
 
     for day in dates:
