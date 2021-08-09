@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 from tweet_normaliser import normalizeTweet
-from decorators import dbs, months
+from mongo import dbs, db, months
 from utils import get_date_array, get_date_range, string_to_month_year
 
 

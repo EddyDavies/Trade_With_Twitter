@@ -1,9 +1,7 @@
 import json
-import os
 import time
 from datetime import datetime, timedelta
 
-from pymongo import MongoClient
 from pymongo.errors import BulkWriteError
 
 
@@ -44,23 +42,3 @@ def minimum_execution_time(seconds=3, microseconds=1):
             return result
         return wrapped
     return wrapper
-
-
-def extract_env_vars():
-    m = os.environ.get("TWITTER_DATE", "Apr 17 Aug 17").split(" ")
-    months_list = list(map(' '.join, zip(m[::2], m[1::2])))
-
-    mongo_url = os.environ.get('MONGO_CLIENT_DOWNLOAD', "mongodb://127.0.0.1:27000")
-    mongo = MongoClient(mongo_url)
-    dbnames = os.environ.get('DBNAMES', "bitcoin ethereum").split(" ")
-    dbs = [mongo["shared"]]
-    for name in dbnames:
-        dbs.append(mongo[name])
-
-    print(f"Date: {months_list[0]} to {months_list[-1]}  DBNames: {dbnames}")
-    print(mongo_url)
-
-    return months_list, dbs, mongo["bitcoin"], mongo
-
-
-months, dbs, db, mongo = extract_env_vars()
