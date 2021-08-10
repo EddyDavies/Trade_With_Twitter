@@ -1,3 +1,8 @@
+import sys
+
+import pandas
+import pandas as pd
+
 from nltk.tokenize import TweetTokenizer
 from emoji import demojize
 import re
@@ -42,6 +47,34 @@ def normalizeTweet(tweet):
     return " ".join(normTweet.split())
 
 
+def normalise_csv(csv_path, col_num=-1):
+    df = pd.read_csv(csv_path)
+    col = "tweets"
+
+    if col_num != -1:
+        header_names = list(range(df.shape[1]))
+        header_names[int(col_num)-1] = col
+        df.columns = header_names
+
+    edited_df = pandas.DataFrame(columns=header_names)
+    for index, row in df.iterrows():
+        tweet = row[col]
+        new_tweet = normalizeTweet(tweet)
+        new_row = row
+        new_row["tweets"] = new_tweet
+        edited_df = edited_df.append(new_row, ignore_index=True)
+
+    split_path = csv_path.split(".")
+    edit_path = f"{split_path[0]}_normalised.{split_path[1]}"
+    edited_df.to_csv(edit_path, index=False, header=False)
+
 if __name__ == "__main__":
-    print(normalizeTweet(
-        "SC has first two presumptive cases of coronavirus, DHEC confirms https://postandcourier.com/health/covid19/sc-has-first-two-presumptive-cases-of-coronavirus-dhec-confirms/article_bddfe4ae-5fd3-11ea-9ce4-5f495366cee6.html?utm_medium=social&utm_source=twitter&utm_campaign=user-share… via @postandcourier"))
+    # df = pd.read_csv("/Users/edwarddavies/Git/Trade_with_Twitter/data/test.csv")
+
+    if len(sys.argv) == 2:
+        normalise_csv(sys.argv[1])
+    if len(sys.argv) > 2:
+        normalise_csv(sys.argv[1], *sys.argv[2:])
+    else:
+        print(normalizeTweet(
+            "SC has first two presumptive cases of coronavirus, DHEC confirms https://postandcourier.com/health/covid19/sc-has-first-two-presumptive-cases-of-coronavirus-dhec-confirms/article_bddfe4ae-5fd3-11ea-9ce4-5f495366cee6.html?utm_medium=social&utm_source=twitter&utm_campaign=user-share… via @postandcourier"))
