@@ -1,6 +1,6 @@
 import sys
+import chardet
 
-import pandas
 import pandas as pd
 
 from nltk.tokenize import TweetTokenizer
@@ -48,7 +48,13 @@ def normalizeTweet(tweet):
 
 
 def normalise_csv(csv_path, col_num=-1):
-    df = pd.read_csv(csv_path)
+
+    try:
+        df = pd.read_csv(csv_path)
+    except UnicodeDecodeError:
+        with open('filename.csv', 'rb') as f:
+            result = chardet.detect(f.readline())
+        df = pd.read_csv(csv_path, encoding=result['encoding'])
     col = "tweets"
 
     if col_num != -1:
