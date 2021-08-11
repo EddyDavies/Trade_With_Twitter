@@ -62,7 +62,7 @@ def normalise_csv(csv_path, col_num=-1):
         header_names[int(col_num)-1] = col
         df.columns = header_names
 
-    edited_df = pandas.DataFrame(columns=header_names)
+    edited_df = pd.DataFrame(columns=header_names)
     for index, row in df.iterrows():
         tweet = row[col]
         new_tweet = normalizeTweet(tweet)
