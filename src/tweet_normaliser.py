@@ -48,13 +48,9 @@ def normalizeTweet(tweet):
 
 
 def normalise_csv(csv_path, col_num=-1):
+    DATASET_ENCODING = "ISO-8859-1"
 
-    try:
-        df = pd.read_csv(csv_path)
-    except UnicodeDecodeError:
-        with open(csv_path, 'rb') as f:
-            result = chardet.detect(f.readline())
-        df = pd.read_csv(csv_path, encoding=result['encoding'])
+    df = pd.read_csv(csv_path, encoding=DATASET_ENCODING)
     col = "tweets"
 
     if col_num != -1:
