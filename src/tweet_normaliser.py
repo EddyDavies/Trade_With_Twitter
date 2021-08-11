@@ -52,7 +52,7 @@ def normalise_csv(csv_path, col_num=-1):
     try:
         df = pd.read_csv(csv_path)
     except UnicodeDecodeError:
-        with open('filename.csv', 'rb') as f:
+        with open(csv_path, 'rb') as f:
             result = chardet.detect(f.readline())
         df = pd.read_csv(csv_path, encoding=result['encoding'])
     col = "tweets"
