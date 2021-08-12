@@ -6,4 +6,4 @@ torch
 pandas
 emoji
 nltk
-chardet
+pycoingecko
