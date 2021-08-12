@@ -57,17 +57,20 @@ def normalise_csv(csv_path, col_num=-1):
         header_names = list(range(df.shape[1]))
         header_names[int(col_num)-1] = col
         df.columns = header_names
+    total = df.shape[0]
 
     edited_df = pd.DataFrame(columns=header_names)
+    split_path = csv_path.split(".")
+    edit_path = f"{split_path[0]}_normalised.{split_path[1]}"
     for index, row in df.iterrows():
         tweet = row[col]
         new_tweet = normalizeTweet(tweet)
         new_row = row
         new_row["tweets"] = new_tweet
         edited_df = edited_df.append(new_row, ignore_index=True)
+        edited_df.to_csv(edit_path, index=False, header=False)
+        print(f"{index+1}/{total} Line Added")
 
-    split_path = csv_path.split(".")
-    edit_path = f"{split_path[0]}_normalised.{split_path[1]}"
     edited_df.to_csv(edit_path, index=False, header=False)
 
 if __name__ == "__main__":
