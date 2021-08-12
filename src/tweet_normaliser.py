@@ -49,7 +49,7 @@ def normalizeTweet(tweet):
 
 def normalise_csv(csv_path, col_num=-1):
     DATASET_ENCODING = "ISO-8859-1"
-
+    print("loading...")
     df = pd.read_csv(csv_path, encoding=DATASET_ENCODING)
     col = "tweets"
 
