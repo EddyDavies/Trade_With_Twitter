@@ -1,5 +1,6 @@
 import sys
 import re
+import time
 
 import pandas as pd
 from nltk.tokenize import TweetTokenizer
@@ -52,6 +53,7 @@ def normalise_csv(csv_path, col_num=-1, start=0):
 
     col = "tweets"
     id = 1
+    estimate_calculated = 0
     start = int(start)
 
     if col_num != -1:
@@ -60,24 +62,45 @@ def normalise_csv(csv_path, col_num=-1, start=0):
         df.columns = header_names
     total = df.shape[0]
 
-    final_df = df.loc[start:].copy()
-
     split_path = csv_path.split(".")
     edit_path = f"{split_path[0]}_from_{start}.csv"
 
+    final_df = df.loc[start:].copy()
     df = df.to_dict()
+    begin = time.time()
+
+
     for index, tweet in df["tweets"].items():
         if index > start:
             new_tweet = str(normalizeTweet(tweet))
             final_df.loc[index, "tweets"] = new_tweet
             if index % 5000 == 0:
                 final_df.loc[:index].to_csv(edit_path, index=False, header=False)
-                print(f"\r{index}/{total} Line Saved")
+                estimate = calculate_estimate(start, index, total, begin)
+                print(f"\r{index}/{total} Line Saved, ETC: {estimate}")
             elif index % 200 == 0:
-                print(f"\r{index}/{total} Line Added", end="")
+                if estimate_calculated < 5:
+                    estimate = calculate_estimate(start, index, total, begin)
+                    estimate_calculated += 1
+                print(f"\r{index}/{total} Line Added, ETC: {estimate}", end="")
 
     final_df.to_csv(edit_path, index=False, header=False)
     print(f"\r{index + 1}/{total} Line Saved")
+
+
+def calculate_estimate(start, index, total, script_begin):
+    now = time.time()
+    duration = now - script_begin
+
+    run_length = index - start
+    run_total = total - start
+
+    estimate_length = (duration * (run_total / run_length))
+    estimate_end = estimate_length + script_begin
+
+    estimate = time.ctime(estimate_end)
+
+    return estimate
 
 
 if __name__ == "__main__":
