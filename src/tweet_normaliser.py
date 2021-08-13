@@ -49,6 +49,7 @@ def normalise_csv(csv_path, col_num=-1, start=0):
     DATASET_ENCODING = "ISO-8859-1"
     print("loading...")
     df = pd.read_csv(csv_path, encoding=DATASET_ENCODING)
+
     col = "tweets"
     id = 1
     start = int(start)
@@ -64,7 +65,8 @@ def normalise_csv(csv_path, col_num=-1, start=0):
     split_path = csv_path.split(".")
     edit_path = f"{split_path[0]}_from_{start}.csv"
 
-    for index, tweet in df[["tweets"]].itertuples():
+    df = df.to_dict()
+    for index, tweet in df["tweets"].items():
         if index > start:
             new_tweet = str(normalizeTweet(tweet))
             final_df.loc[index, "tweets"] = new_tweet
