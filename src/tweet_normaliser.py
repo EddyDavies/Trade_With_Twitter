@@ -71,7 +71,7 @@ def normalise_csv(csv_path, col_num=-1, start=0):
             if index % 5000 == 0:
                 final_df.loc[:index].to_csv(edit_path, index=False, header=False)
                 print(f"\r{index}/{total} Line Saved")
-            else:
+            elif index % 200 == 0:
                 print(f"\r{index}/{total} Line Added", end="")
 
     final_df.to_csv(edit_path, index=False, header=False)
