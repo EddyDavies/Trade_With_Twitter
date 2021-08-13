@@ -1,11 +1,9 @@
 import sys
-import chardet
+import re
 
 import pandas as pd
-
 from nltk.tokenize import TweetTokenizer
 from emoji import demojize
-import re
 
 tokenizer = TweetTokenizer()
 
@@ -47,7 +45,7 @@ def normalizeTweet(tweet):
     return " ".join(normTweet.split())
 
 
-def normalise_csv(csv_path, col_num=-1):
+def normalise_csv(csv_path, col_num=-1, start=0):
     DATASET_ENCODING = "ISO-8859-1"
     print("loading...")
     df = pd.read_csv(csv_path, encoding=DATASET_ENCODING)
@@ -62,14 +60,20 @@ def normalise_csv(csv_path, col_num=-1):
     edited_df = pd.DataFrame(columns=header_names)
     split_path = csv_path.split(".")
     edit_path = f"{split_path[0]}_normalised.{split_path[1]}"
-    for index, row in df.iterrows():
-        tweet = row[col]
-        new_tweet = normalizeTweet(tweet)
-        new_row = row
-        new_row["tweets"] = new_tweet
-        edited_df = edited_df.append(new_row, ignore_index=True)
-        edited_df.to_csv(edit_path, index=False, header=False)
-        print(f"{index+1}/{total} Line Added")
+
+    for index, row in df.itertuples():
+        if index > start:
+            tweet = row[col]
+            new_tweet = normalizeTweet(tweet)
+            new_row = row
+            new_row["tweets"] = new_tweet
+            edited_df = edited_df.append(new_row, ignore_index=True)
+            time.sleep(0.001)
+            if index % 5000 == 0:
+                edited_df.to_csv(edit_path, index=False, header=False)
+                print(f"\r{index+1}/{total} Line Saved")
+            else:
+                print(f"\r{index+1}/{total} Line Added", end="")
 
     edited_df.to_csv(edit_path, index=False, header=False)
 
