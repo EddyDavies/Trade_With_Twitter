@@ -50,6 +50,8 @@ def normalise_csv(csv_path, col_num=-1, start=0):
     print("loading...")
     df = pd.read_csv(csv_path, encoding=DATASET_ENCODING)
     col = "tweets"
+    id = 1
+    start = int(start)
 
     if col_num != -1:
         header_names = list(range(df.shape[1]))
@@ -57,25 +59,24 @@ def normalise_csv(csv_path, col_num=-1, start=0):
         df.columns = header_names
     total = df.shape[0]
 
-    edited_df = pd.DataFrame(columns=header_names)
+    final_df = df.loc[start:].copy()
+
     split_path = csv_path.split(".")
-    edit_path = f"{split_path[0]}_normalised.{split_path[1]}"
+    edit_path = f"{split_path[0]}_from_{start}.csv"
 
-    for index, row in df.itertuples():
+    for index, tweet in df[["tweets"]].itertuples():
         if index > start:
-            tweet = row[col]
-            new_tweet = normalizeTweet(tweet)
-            new_row = row
-            new_row["tweets"] = new_tweet
-            edited_df = edited_df.append(new_row, ignore_index=True)
-            time.sleep(0.001)
+            new_tweet = str(normalizeTweet(tweet))
+            final_df.loc[index, "tweets"] = new_tweet
             if index % 5000 == 0:
-                edited_df.to_csv(edit_path, index=False, header=False)
-                print(f"\r{index+1}/{total} Line Saved")
+                final_df.loc[:index].to_csv(edit_path, index=False, header=False)
+                print(f"\r{index}/{total} Line Saved")
             else:
-                print(f"\r{index+1}/{total} Line Added", end="")
+                print(f"\r{index}/{total} Line Added", end="")
 
-    edited_df.to_csv(edit_path, index=False, header=False)
+    final_df.to_csv(edit_path, index=False, header=False)
+    print(f"\r{index + 1}/{total} Line Saved")
+
 
 if __name__ == "__main__":
     # df = pd.read_csv("/Users/edwarddavies/Git/Trade_with_Twitter/data/test.csv")
