@@ -2,8 +2,6 @@ import calendar
 from datetime import datetime, timedelta, timezone
 from typing import List
 
-from decorators import db
-
 
 def check_for_duplicates(dictionary_list, item):
     # check no duplicates in list of dictionaries
@@ -133,19 +131,6 @@ def append_or_create_list(key: str, container: dict, content: dict):
     else:
         container[key].append(content)
     return container
-
-
-def fix_array_misalignment(day):
-    buggy_tracker = db["counts"].find_one({"_id": {"$regex": day}}, {"_id": 0})
-    if len(buggy_tracker["ends"]) > len(buggy_tracker["starts"]):
-        print("   Last End " + buggy_tracker["ends"][-1])
-        del buggy_tracker["ends"][-1]
-
-    elif len(buggy_tracker["starts"]) > len(buggy_tracker["ends"]):
-        print("   Last Start " + buggy_tracker["starts"][-1])
-        del buggy_tracker["starts"][-1]
-
-    db["counts"].replace_one({"_id": day}, buggy_tracker)
 
 
 if __name__ == "__main__":

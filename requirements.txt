@@ -7,3 +7,9 @@ pandas
 emoji
 nltk
 pycoingecko
+pandas_ta
+torchtext
+scikit-learn
+farm
+jupyter
+runipy
