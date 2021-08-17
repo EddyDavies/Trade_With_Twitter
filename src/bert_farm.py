@@ -19,20 +19,20 @@ def read_file(file_name: str) -> dict:
     return {'text': text_file}
 
 
-def create_input(text_files:list) -> list:
+def create_input(text_files: list) -> list:
     model_input = list()
     for text_file in text_files:
-    model_input.append(read_file(text_file['file']))
+        model_input.append(read_file(text_file['file']))
     return model_input
 
 
-def create_result_overview (articles:list, result:list) -> pd.DataFrame:
+def create_result_overview(articles: list, result:list) -> pd.DataFrame:
     files = list()
     labels = list()
     predictions = list()
     for i in range(len(articles)):
-    files.append (articles[i]['file'])
-    labels.append(articles[i]['genre'])
+        files.append(articles[i]['file'])
+        labels.append(articles[i]['genre'])
     predictions.append(result[0]['predictions'][i]['label'].strip("'[]'"))
     data = {'file': files, 'actual': labels, 'prediction': predictions}
     df = pd.DataFrame(data)
