@@ -1,8 +1,8 @@
 pymongo
 dnspython
 jupyter
-transformers
-torch
+transformers==4.6.1
+torch=1.8.0
 pandas
 emoji
 nltk
