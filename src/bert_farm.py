@@ -82,12 +82,12 @@ if __name__ == '__main__':
                                                 dev_split=0.1 # this will extract 10% of the train set to create a dev set
                                                 )
 
-    cpus = multiprocessing.cpu_count()
+    # cpus = multiprocessing.cpu_count()
 
     data_silo = DataSilo(
         processor=processor,
-        batch_size=batch_size,
-        max_multiprocessing_chunksize=cpus)
+        batch_size=batch_size)
+        # max_multiprocessing_chunksize=cpus)
 
     # loading the pretrained BERT base cased model
     language_model = LanguageModel.load(lang_model)
