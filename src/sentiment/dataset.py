@@ -192,14 +192,15 @@ def save_with_header(raw_path):
 if __name__ == '__main__':
 
     unsplit_path = "../data/training_start_to_end.csv"
+    header_path = "../data/training_start_to_end_head.csv"
     # unsplit_path = "../data/training.1600000.processed.noemoticon.csv"
     path = "../data/fine_tune"
     path = "../data/fine_tune_bert"
-    save_with_header(unsplit_path)
-    remove_long(unsplit_path)
+    save_with_header(unsplit_path, header_path)
+    remove_long(header_path)
 
     if len(sys.argv) != 1:
-        split(unsplit_path, path, sys.argv[1])
+        split(header_path, path, sys.argv[1])
     else:
-        split(unsplit_path, path)
+        split(header_path, path)
 
