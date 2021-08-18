@@ -173,31 +173,30 @@ def split(raw_path, fine_tune_path, sample_percent=None):
     print(train.shape[0], test.shape[0])
 
 
-def remove_long(raw_path, out_path):
+def remove_long(raw_path):
     # df = pd.read_csv(raw_path, encoding="ISO-8859-1")
     df = pd.read_csv(raw_path)
     filtered_df = df[df['tweet'].apply(lambda x: len(x) < 512)]
 
-    filtered_df.to_csv(out_path, index=False)
+    filtered_df.to_csv(raw_path, index=False)
     print(f"Long rows in {raw_path} removed")
 
 
-def save_with_header(raw_path, out_path):
+def save_with_header(raw_path):
     df = pd.read_csv(raw_path)
     df.columns = ["sentiment", "id", "date", "query", "user", "tweet"]
-    df.to_csv(out_path, index=False)
+    df.to_csv(raw_path, index=False)
 
 
 
 if __name__ == '__main__':
 
     unsplit_path = "../data/training_start_to_end.csv"
-    header_path = "../data/training_start_to_end_head.csv"
     # unsplit_path = "../data/training.1600000.processed.noemoticon.csv"
     path = "../data/fine_tune"
     path = "../data/fine_tune_bert"
-    save_with_header(unsplit_path, header_path)
-    remove_long(header_path, unsplit_path)
+    # save_with_header(unsplit_path)
+    remove_long(unsplit_path)
 
     if len(sys.argv) != 1:
         split(unsplit_path, path, sys.argv[1])
