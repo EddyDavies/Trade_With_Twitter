@@ -168,8 +168,8 @@ def split(raw_path, fine_tune_path, sample_percent=None):
     if not os.path.exists(fine_tune_path):
         os.makedirs(fine_tune_path)
 
-    train.to_csv(fine_tune_path + "/train.csv", index=False, header=header)
-    test.to_csv(fine_tune_path + "/test.csv", index=False, header=header)
+    train.to_csv(fine_tune_path + "/train.csv", index=False, header=header, encoding='utf-8')
+    test.to_csv(fine_tune_path + "/test.csv", index=False, header=header, encoding='utf-8')
     print(train.shape[0], test.shape[0])
 
 if __name__ == '__main__':
