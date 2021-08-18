@@ -182,6 +182,12 @@ def remove_long(raw_path):
     print(f"Long rows in {raw_path} removed")
 
 
+def save_with_header(raw_path):
+    df = pd.read_csv(raw_path)
+    df.columns = ["sentiment", "id", "date", "query", "user", "tweet"]
+    df.to_csv(raw_path, index=False)
+
+
 
 if __name__ == '__main__':
 
@@ -189,6 +195,7 @@ if __name__ == '__main__':
     # unsplit_path = "../data/training.1600000.processed.noemoticon.csv"
     path = "../data/fine_tune"
     path = "../data/fine_tune_bert"
+    save_with_header(unsplit_path)
     remove_long(unsplit_path)
 
     if len(sys.argv) != 1:
