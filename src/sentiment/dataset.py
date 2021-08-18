@@ -175,7 +175,7 @@ def split(raw_path, fine_tune_path, sample_percent=None):
 if __name__ == '__main__':
 
     unsplit_path = "../data/training_start_to_end.csv"
-    unsplit_path = "../data/training.1600000.processed.noemoticon.csv"
+    # unsplit_path = "../data/training.1600000.processed.noemoticon.csv"
     path = "../data/fine_tune"
     path = "../data/fine_tune_bert"
 
