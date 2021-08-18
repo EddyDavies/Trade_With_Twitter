@@ -1,4 +1,5 @@
 import os
+import sys
 
 import pandas as pd
 
@@ -145,7 +146,7 @@ from sklearn.model_selection import train_test_split
 #
 
 
-def split(raw_path, fine_tune_path):
+def split(raw_path, fine_tune_path, sample_percent=None):
 
     DATASET_ENCODING = "ISO-8859-1"
     print("loading...")
@@ -156,7 +157,12 @@ def split(raw_path, fine_tune_path):
     cols[1], cols[0] = cols[0], cols[1]
     df = df[cols]
 
-    train, test = train_test_split(df, test_size=0.2, random_state=1)
+    if sample_percent is None:
+        train, test = train_test_split(df, test_size=0.2, random_state=1)
+    else:
+        sample = int(float(sample_percent) * int(df.shape[0]))
+        train, test = train_test_split(df.iloc[:sample, :], test_size=0.2, random_state=1)
+        
     header = ["tweet", "sentiment"]
 
     if not os.path.exists(fine_tune_path):
@@ -173,5 +179,8 @@ if __name__ == '__main__':
     path = "../data/fine_tune"
     path = "../data/fine_tune_bert"
 
-    split(unsplit_path, path)
+    if len(sys.argv) != 1:
+        split(unsplit_path, path, sys.argv[1])
+    else:
+        split(unsplit_path, path)
 
