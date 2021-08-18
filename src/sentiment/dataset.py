@@ -173,12 +173,12 @@ def split(raw_path, fine_tune_path, sample_percent=None):
     print(train.shape[0], test.shape[0])
 
 
-def remove_long(raw_path):
+def remove_long(raw_path, out_path):
     # df = pd.read_csv(raw_path, encoding="ISO-8859-1")
     df = pd.read_csv(raw_path)
     filtered_df = df[df['tweet'].apply(lambda x: len(x) < 512)]
 
-    filtered_df.to_csv(raw_path, index=False)
+    filtered_df.to_csv(out_path, index=False)
     print(f"Long rows in {raw_path} removed")
 
 
