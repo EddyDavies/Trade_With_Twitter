@@ -40,6 +40,7 @@ def twitter_date_format_to_day(date: str):
 
     return day
 
+
 def twitter_date_format_to_time(date: str):
     # Get day in '%Y-%m-%d' format from exact twitter datetime
 
@@ -99,7 +100,6 @@ def get_date_array(date_range: tuple):
     return date_array
 
 
-
 def last_day_in_month(date_string):
 
     date = datetime.strptime(date_string, "%Y-%m-%d")
@@ -109,6 +109,7 @@ def last_day_in_month(date_string):
         return True
     else:
         return False
+
 
 def get_month_array(month_range):
     # returns first and last month with year for a specified range between 2 months with years
