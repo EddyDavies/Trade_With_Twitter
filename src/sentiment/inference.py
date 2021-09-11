@@ -30,8 +30,10 @@ def get_sentiments(
         tweets,
         sentiment_analyser=None,
         save_every=2000,
-        percentage_per_chunk=0.05,
+        percentage_per_chunk=5,
         chunk=0):
+
+    """"""
     # TODO Implement chunk to choose i load range to download
     # TODO Check reduction used first time and match
 
@@ -60,7 +62,7 @@ def scale_tweet_list(percentage_per_chunk, save_every, tweets):
 
     length = len(tweets)
     tweet_cap = length / percentage_per_chunk
-    last_tweet = tweet_cap - (tweet_cap % save_every)
+    last_tweet = int(tweet_cap - (tweet_cap % save_every))
     scaled_tweets = tweets[:last_tweet]
     return scaled_tweets
 
