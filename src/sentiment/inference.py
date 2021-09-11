@@ -6,6 +6,24 @@ from transformers import pipeline
 
 from utils import string_to_month_year
 
+# This attempt at a class is so wrong
+# class Tweet_Inference(
+#     results_folder: str,
+#     source: str
+#     # ToDo Parmaterise for a task
+#     # task: str,
+#     # model: Optional = None,
+#     # config: Optional[Union[str, PretrainedConfig]] = None,
+#     # tokenizer: Optional[Union[str, PreTrainedTokenizer]] = None,
+#     # feature_extractor: Optional[Union[str, PreTrainedFeatureExtractor]] = None,
+#     # framework: Optional[str] = None,
+#     # revision: Optional[str] = None,
+#     # use_fast: bool = True,
+#     # use_auth_token: Optional[Union[str, bool]] = None,
+#     # model_kwargs: Dict[str, Any] = {},
+#     # **kwargs
+# )
+
 def get_sentiments(
         date,
         tweets,
@@ -21,6 +39,7 @@ def get_sentiments(
 
     scaled_tweets = scale_tweet_list(percentage_per_chunk, save_every, tweets)
     results = []
+    length = len(tweets)
 
     i = 0
     for tweet in tqdm(scaled_tweets, desc=date):
@@ -37,6 +56,7 @@ def get_sentiments(
 
 
 def scale_tweet_list(percentage_per_chunk, save_every, tweets):
+
     length = len(tweets)
     tweet_cap = length / percentage_per_chunk
     last_tweet = tweet_cap - (tweet_cap % save_every)
@@ -44,17 +64,18 @@ def scale_tweet_list(percentage_per_chunk, save_every, tweets):
     return scaled_tweets
 
 
-def get_paths(results_folder = None, source = None, reset=False) -> (str, str):
+def get_paths(results_folder=None, source=None, reset=False) -> (str, str):
     if source is None:
         source = '../data/bitcoin_tweets/'
     if results_folder is None:
         results_folder = '../data/bitcoin_scores/'
 
     if not os.path.exists(results_folder):
-            os.mkdir(results_folder)
+        os.mkdir(results_folder)
 
-    if reset:
+    # if reset:
     return source, results_folder
+
 
 def to_dict_of_lists(LD):
     nd = {}
