@@ -1,11 +1,6 @@
-import os
-import pandas as pd
+from transformers import pipeline
 
-import time
-from datetime import datetime
-from tqdm.auto import tqdm
-
-from sentiment.inference import get_paths, get_tweets, get_sentiments, to_dict_of_lists, save_sentiments
+from sentiment.inference import get_paths, get_tweets, get_sentiments, to_dict_of_lists, save_sentiments, check_last_day
 from utils import get_date_array, get_month_array, string_to_month_year, last_day_in_month
 
 
@@ -22,15 +17,18 @@ if __name__ == '__main__':
 
     for date in dates:
         ids, tweets = get_tweets(date)
-        results = get_sentiments(date, tweets,  sentiment_analysis,
-                                 save_every=10, percentage_per_chunk=10)
+
+        percentage_per_chunk = 10
+        save_every = 2000
+        results = get_sentiments(date, tweets, sentiment_analysis,
+            save_every=save_every, percentage_per_chunk=percentage_per_chunk)
+
         outputs = to_dict_of_lists(results)
         outputs["ids"] = ids[:100]
 
         save_sentiments(outputs, date)
-            with open(results_folder+"progress.log", 'a') as f:
-                month = string_to_month_year(date)
-                f.write("'" + month + "',")
+
+        check_last_day(results, results_folder, date)
 
 
 

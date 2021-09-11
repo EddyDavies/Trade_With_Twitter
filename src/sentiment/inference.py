@@ -60,9 +60,11 @@ def get_sentiments(
 
 def scale_tweet_list(percentage_per_chunk, save_every, tweets):
 
-    length_of_tweets = len(tweets)
+    # length_of_tweets = len(tweets)
+    length_of_tweets = 2365376
     percent_of_length = length_of_tweets / percentage_per_chunk
-    last_tweet = int(percent_of_length - (percent_of_length % save_every))
+    last_tweet = int((length_of_tweets / percentage_per_chunk) - (percent_of_length % save_every))
+
     scaled_tweets = tweets[:last_tweet]
     return scaled_tweets
 
