@@ -31,6 +31,7 @@ def get_sentiments(
         sentiment_analyser=None,
         save_every=2000,
         percentage_per_chunk=5,
+        results_folder,
         chunk=0):
 
     """"""
@@ -52,7 +53,7 @@ def get_sentiments(
 
         i += 1
         if i % save_every == 0:
-            save_sentiments(results, date)
+            save_sentiments(results, results_folder, date)
         if i > scaled_length:
             break
     return results
