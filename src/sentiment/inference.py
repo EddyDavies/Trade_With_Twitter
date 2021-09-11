@@ -4,7 +4,8 @@ import pandas as pd
 from tqdm import tqdm
 from transformers import pipeline
 
-from utils import string_to_month_year
+from utils import string_to_month_year, last_day_in_month
+
 
 # This attempt at a class is so wrong
 # class Tweet_Inference(
@@ -64,25 +65,30 @@ def scale_tweet_list(percentage_per_chunk, save_every, tweets):
     return scaled_tweets
 
 
-def get_paths(reset=False, results_folder=None, source=None, data_folder="../data") -> (str, str):
+def get_paths(reset=False, crypto='bitcoin', data_folder='../data'):
     # if reset:
     #  ToDo Remove old data
 
     if not os.path.exists(data_folder):
         os.mkdir(data_folder)
 
-    if source is None:
-        source = '../data/bitcoin_tweets'
-    if results_folder is None:
-        results_folder = '../data/bitcoin_scores'
+    raw_source_folder = '{}_tweets/'
+    raw_results_folder = '{}_scores/'
+
+    source_folder = os.path.join(data_folder, raw_source_folder)
+    results_folder = os.path.join(data_folder, raw_results_folder)
+
+    # if not os.path.exists(results_folder):
+    #     throw
 
     if not os.path.exists(results_folder):
         os.mkdir(results_folder)
 
-    return source, results_folder
+    return source_folder, results_folder
 
 
 def to_dict_of_lists(LD):
+
     nd = {}
     for d in LD:
         for k, v in d[0].items():
@@ -93,8 +99,7 @@ def to_dict_of_lists(LD):
     return nd
 
 
-def get_tweets(date, source='../data/bitcoin_tweets'):
-
+def get_tweets(date, source='../data/bitcoin_tweets/'):
 
     month = string_to_month_year(date)
     path = source + month + "/MTurk_" + date + ".csv"
@@ -105,9 +110,20 @@ def get_tweets(date, source='../data/bitcoin_tweets'):
     return df["id"].values.tolist(), df["tweet"].values.tolist()
 
 
-def save_sentiments(results, date):
+def save_sentiments(results, results_folder, date):
+
     df = pd.DataFrame(results)
 
     results_path = results_folder + date + ".csv"
 
     df.to_csv(results_path, mode="a", header=False, index=False)
+
+
+def check_last_day(results_folder, date):
+
+    log_path = os.path.join(results_folder, "progress.log", )
+
+    if last_day_in_month(date):
+        with open(log_path, 'a') as f:
+            month = string_to_month_year(date)
+            f.write("'" + month + "',")
