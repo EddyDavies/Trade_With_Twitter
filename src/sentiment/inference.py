@@ -41,9 +41,10 @@ def get_sentiments(
         sentiment_analyser = pipeline("sentiment-analysis")
 
     scaled_tweets, scaled_length = scale_tweet_list(percentage_per_chunk, save_every, tweets)
-    results = []
+    print(scaled_length)
 
     i = 0
+    results = []
     for tweet in tqdm(scaled_tweets, desc=date):
 
         result = sentiment_analyser(tweet)
