@@ -99,6 +99,17 @@ def get_date_array(date_range: tuple):
     return date_array
 
 
+
+def last_day_in_month(date_string):
+
+    date = datetime.strptime(date_string, "%Y-%m-%d")
+    last_day = calendar.monthrange(date.year, date.month)[1]
+
+    if last_day == date.day:
+        return True
+    else:
+        return False
+
 def get_month_array(month_range):
     # returns first and last month with year for a specified range between 2 months with years
 
