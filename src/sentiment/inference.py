@@ -53,7 +53,7 @@ def get_sentiments(
             results.append(result)
 
         except ValueError as bug:
-            track_bug(results_folder, date, tweet)
+            track_bug(results_folder, date, tweet, bug)
 
         i += 1
         if i % save_every == 0:
