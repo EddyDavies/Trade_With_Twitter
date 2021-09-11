@@ -65,18 +65,20 @@ def scale_tweet_list(percentage_per_chunk, save_every, tweets):
 
 
 def get_paths(reset=False, results_folder=None, source=None, data_folder="../data") -> (str, str):
+    # if reset:
+    #  ToDo Remove old data
+
     if not os.path.exists(data_folder):
         os.mkdir(data_folder)
 
     if source is None:
         source = '../data/bitcoin_tweets'
     if results_folder is None:
-        results_folder = '../data/bitcoin_scores/'
+        results_folder = '../data/bitcoin_scores'
 
     if not os.path.exists(results_folder):
         os.mkdir(results_folder)
 
-    # if reset:
     return source, results_folder
 
 
@@ -91,7 +93,7 @@ def to_dict_of_lists(LD):
     return nd
 
 
-def get_tweets(source, date):
+def get_tweets(date, source='../data/bitcoin_tweets'):
 
 
     month = string_to_month_year(date)
