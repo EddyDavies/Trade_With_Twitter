@@ -53,10 +53,22 @@ def get_sentiments(
 
         i += 1
         if i % save_every == 0:
-            save_sentiments(ids, results, results_folder, date)
+            save_sentiments(ids[:scaled_length], results, results_folder, date)
         if i > scaled_length:
             break
     return results
+
+
+def save_sentiments(ids, results, results_folder, date):
+
+    outputs = to_dict_of_lists(results)
+    outputs["ids"] = ids
+
+    df = pd.DataFrame(outputs)
+
+    date_csv = date + ".csv"
+    results_path = os.path.join(results_folder, date_csv)
+    df.to_csv(results_path, mode="a", header=False, index=False)
 
 
 def scale_tweet_list(percentage_per_chunk, save_every, tweets):
@@ -106,18 +118,6 @@ def get_tweets(date, source='../data/bitcoin_tweets/'):
         df = pd.read_csv(f)
 
     return df["id"].values.tolist(), df["tweet"].values.tolist()
-
-
-def save_sentiments(ids, results, results_folder, date):
-
-    outputs = to_dict_of_lists(results)
-    outputs["ids"] = ids
-
-    df = pd.DataFrame(outputs)
-
-    date_csv = date + ".csv"
-    results_path = os.path.join(results_folder, date_csv)
-    df.to_csv(results_path, mode="a", header=False, index=False)
 
 
 def to_dict_of_lists(LD):
