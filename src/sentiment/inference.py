@@ -64,9 +64,12 @@ def scale_tweet_list(percentage_per_chunk, save_every, tweets):
     return scaled_tweets
 
 
-def get_paths(results_folder=None, source=None, reset=False) -> (str, str):
+def get_paths(reset=False, results_folder=None, source=None, data_folder="../data") -> (str, str):
+    if not os.path.exists(data_folder):
+        os.mkdir(data_folder)
+
     if source is None:
-        source = '../data/bitcoin_tweets/'
+        source = '../data/bitcoin_tweets'
     if results_folder is None:
         results_folder = '../data/bitcoin_scores/'
 
