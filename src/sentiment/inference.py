@@ -40,9 +40,8 @@ def get_sentiments(
     if sentiment_analyser is None:
         sentiment_analyser = pipeline("sentiment-analysis")
 
-    scaled_tweets = scale_tweet_list(percentage_per_chunk, save_every, tweets)
+    scaled_tweets, scaled_length = scale_tweet_list(percentage_per_chunk, save_every, tweets)
     results = []
-    length = len(tweets)
 
     i = 0
     for tweet in tqdm(scaled_tweets, desc=date):
@@ -53,20 +52,19 @@ def get_sentiments(
         i += 1
         if i % save_every == 0:
             save_sentiments(results, date)
-        if i > (length * percentage_per_chunk):
+        if i > scaled_length:
             break
     return results
 
 
 def scale_tweet_list(percentage_per_chunk, save_every, tweets):
 
-    # length_of_tweets = len(tweets)
-    length_of_tweets = 2365376
+    length_of_tweets = len(tweets)
     percent_of_length = length_of_tweets / percentage_per_chunk
     last_tweet = int((length_of_tweets / percentage_per_chunk) - (percent_of_length % save_every))
 
     scaled_tweets = tweets[:last_tweet]
-    return scaled_tweets
+    return scaled_tweets, last_tweet
 
 
 def get_paths(reset=False, crypto='bitcoin', data_folder='../data'):
