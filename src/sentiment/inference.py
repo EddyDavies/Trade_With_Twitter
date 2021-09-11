@@ -28,10 +28,10 @@ from utils import string_to_month_year, last_day_in_month
 def get_sentiments(
         date,
         tweets,
+        results_folder,
         sentiment_analyser=None,
         save_every=2000,
         percentage_per_chunk=5,
-        results_folder,
         chunk=0):
 
     """"""
