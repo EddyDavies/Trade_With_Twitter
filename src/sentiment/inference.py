@@ -72,8 +72,8 @@ def get_paths(reset=False, crypto='bitcoin', data_folder='../data'):
     if not os.path.exists(data_folder):
         os.mkdir(data_folder)
 
-    raw_source_folder = '{}_tweets/'
-    raw_results_folder = '{}_scores/'
+    raw_source_folder = f'{crypto}_tweets/'
+    raw_results_folder = f'{crypto}_scores/'
 
     source_folder = os.path.join(data_folder, raw_source_folder)
     results_folder = os.path.join(data_folder, raw_results_folder)
