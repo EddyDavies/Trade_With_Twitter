@@ -42,7 +42,6 @@ def get_sentiments(
         sentiment_analyser = pipeline("sentiment-analysis")
 
     scaled_tweets, scaled_length = scale_tweet_list(percentage_per_chunk, save_every, tweets)
-    print(scaled_length)
 
     i = 0
     results = []
