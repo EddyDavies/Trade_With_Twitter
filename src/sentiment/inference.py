@@ -28,8 +28,9 @@ from utils import string_to_month_year, last_day_in_month
 def get_sentiments(
         date,
         tweets,
+        ids,
         results_folder,
-        sentiment_analyser=None,
+        sentiment_analysis=None,
         save_every=2000,
         percentage_per_chunk=5,
         chunk=0):
@@ -38,8 +39,8 @@ def get_sentiments(
     # TODO Implement chunk to choose i load range to download
     # TODO Check reduction used first time and match
 
-    if sentiment_analyser is None:
-        sentiment_analyser = pipeline("sentiment-analysis")
+    if sentiment_analysis is None:
+        sentiment_analysis = pipeline("sentiment-analysis")
 
     scaled_tweets, scaled_length = scale_tweet_list(percentage_per_chunk, save_every, tweets)
 
@@ -47,12 +48,12 @@ def get_sentiments(
     results = []
     for tweet in tqdm(scaled_tweets, desc=date):
 
-        result = sentiment_analyser(tweet)
+        result = sentiment_analysis(tweet)
         results.append(result)
 
         i += 1
         if i % save_every == 0:
-            save_sentiments(results, results_folder, date)
+            save_sentiments(ids, results, results_folder, date)
         if i > scaled_length:
             break
     return results
@@ -90,18 +91,6 @@ def get_paths(reset=False, crypto='bitcoin', data_folder='../data'):
     return source_folder, results_folder
 
 
-def to_dict_of_lists(LD):
-
-    nd = {}
-    for d in LD:
-        for k, v in d[0].items():
-            try:
-                nd[k].append(v)
-            except KeyError:
-                nd[k] = [v]
-    return nd
-
-
 def get_tweets(date, source='../data/bitcoin_tweets/'):
 
     month = string_to_month_year(date)
@@ -113,13 +102,28 @@ def get_tweets(date, source='../data/bitcoin_tweets/'):
     return df["id"].values.tolist(), df["tweet"].values.tolist()
 
 
-def save_sentiments(results, results_folder, date):
+def save_sentiments(ids, results, results_folder, date):
 
-    df = pd.DataFrame(results)
+    outputs = to_dict_of_lists(results)
+    outputs["ids"] = ids
 
-    results_path = results_folder + date + ".csv"
+    df = pd.DataFrame(outputs)
 
+    date_csv = date + ".csv"
+    results_path = os.path.join(results_folder, date_csv)
     df.to_csv(results_path, mode="a", header=False, index=False)
+
+
+def to_dict_of_lists(LD):
+
+    nd = {}
+    for d in LD:
+        for k, v in d[0].items():
+            try:
+                nd[k].append(v)
+            except KeyError:
+                nd[k] = [v]
+    return nd
 
 
 def check_last_day(results_folder, date):

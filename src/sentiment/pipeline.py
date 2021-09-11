@@ -20,14 +20,13 @@ if __name__ == '__main__':
 
         percentage_per_chunk = 10
         save_every = 2000
-        results = get_sentiments(date, tweets, sentiment_analysis, results_folder,
-            save_every=save_every, percentage_per_chunk=percentage_per_chunk)
+        results = get_sentiments(date, tweets, ids, results_folder,
+                                 sentiment_analysis=sentiment_analysis,
+                                 save_every=save_every,
+                                 percentage_per_chunk=percentage_per_chunk)
 
-        outputs = to_dict_of_lists(results)
-        outputs["ids"] = ids
-
-        save_sentiments(outputs, date)
-        check_last_day(results, results_folder, date)
+        save_sentiments(ids, tweets, results_folder, date)
+        check_last_day(ids, results, results_folder, date)
 
 
 
