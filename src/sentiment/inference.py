@@ -48,8 +48,12 @@ def get_sentiments(
     results = []
     for tweet in tqdm(scaled_tweets, desc=date):
 
-        result = sentiment_analysis(tweet)
-        results.append(result)
+        try:
+            result = sentiment_analysis(tweet)
+            results.append(result)
+
+        except ValueError as bug:
+            track_bug(results_folder, date, tweet)
 
         i += 1
         if i % save_every == 0:
@@ -140,3 +144,11 @@ def check_last_day(results_folder, date):
         with open(log_path, 'a') as f:
             month = string_to_month_year(date)
             f.write("'" + month + "',")
+
+
+def track_bug(results_folder, date, tweet, bug):
+    log_path = os.path.join(results_folder, "bug.log", )
+
+    with open(log_path, 'a') as f:
+        bug = f"{date}, {tweet}, {bug} "
+        f.write(bug + "\n")
