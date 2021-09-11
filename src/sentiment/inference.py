@@ -147,7 +147,11 @@ def check_last_day(results_folder, date):
 
 
 def track_bug(results_folder, date, tweet, bug):
-    log_path = os.path.join(results_folder, "bug.log", )
+    log_folder = os.path.join(results_folder, "bug")
+    if not os.path.exists(log_folder):
+        os.mkdir(log_folder)
+
+    log_path = os.path.join(log_folder, f"{date}.log")
 
     with open(log_path, 'a') as f:
         bug = f"{date}, {tweet}, {bug} "
