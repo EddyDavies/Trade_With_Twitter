@@ -102,7 +102,6 @@ def get_paths(reset=False,
     if not os.path.exists(data_folder):
         os.mkdir(data_folder)
 
-
     try:
         model_developer, model_name, = model_name.split('/', 1)
     except:
@@ -114,10 +113,13 @@ def get_paths(reset=False,
     except:
         pass
 
+    if not os.path.exists(model_folder):
+        os.mkdir(model_folder)
+
     raw_results_folder = f'{crypto}_scores/'
     raw_source_folder = f'{crypto}_tweets/'
 
-    source_folder = os.path.join(data_folder, raw_source_folder, model_folder)
+    source_folder = os.path.join(data_folder, raw_source_folder)
     results_folder = os.path.join(data_folder, raw_results_folder, model_folder)
 
     # if not os.path.exists(results_folder):
