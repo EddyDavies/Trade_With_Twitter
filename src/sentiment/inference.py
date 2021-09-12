@@ -58,7 +58,7 @@ def get_sentiments(
         i += 1
         if i % save_every == 0:
             save_sentiments(ids[:scaled_length], results, results_folder, date)
-        if i > scaled_length:
+        if i >= scaled_length:
             break
     return results
 
