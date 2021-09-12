@@ -17,3 +17,5 @@ transformers[torch]
 # p_tqdm
 # deepspeed
 tqdm
+# jupyterlab
+# jupyter_http_over_ws

@@ -1,6 +1,7 @@
 from transformers import pipeline
 
-from sentiment.inference import get_paths, get_tweets, get_sentiments, to_dict_of_lists, save_sentiments, check_last_day
+from sentiment.inference import get_paths, get_tweets, get_sentiments, save_sentiments
+from sentiment.utils import to_dict_of_lists, check_last_day
 from utils import get_date_array, get_month_array, string_to_month_year, last_day_in_month
 
 

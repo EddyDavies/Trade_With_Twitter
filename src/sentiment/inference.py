@@ -4,7 +4,8 @@ import pandas as pd
 from tqdm import tqdm
 from transformers import pipeline
 
-from utils import string_to_month_year, last_day_in_month
+from sentiment.utils import to_dict_of_lists
+from utils import string_to_month_year
 
 
 # This attempt at a class is so wrong
@@ -91,7 +92,10 @@ def scale_tweet_list(percentage_per_chunk, save_every, tweets):
     return scaled_tweets, last_tweet
 
 
-def get_paths(reset=False, crypto='bitcoin', data_folder='../data'):
+def get_paths(reset=False,
+              crypto='bitcoin',
+              data_folder='../data',
+              model_name=None):
     # if reset:
     #  ToDo Remove old data
 
@@ -101,8 +105,13 @@ def get_paths(reset=False, crypto='bitcoin', data_folder='../data'):
     raw_source_folder = f'{crypto}_tweets/'
     raw_results_folder = f'{crypto}_scores/'
 
-    source_folder = os.path.join(data_folder, raw_source_folder)
-    results_folder = os.path.join(data_folder, raw_results_folder)
+
+    model_developer, model_name, = txt.split('/', 1)
+
+    model_folder = f"{short_model_name}"
+
+    source_folder = os.path.join(data_folder, model_folder, raw_source_folder)
+    results_folder = os.path.join(data_folder, model_folder, raw_results_folder)
 
     # if not os.path.exists(results_folder):
     #     throw
@@ -124,28 +133,6 @@ def get_tweets(date, source='../data/bitcoin_tweets/'):
     return df["id"].values.tolist(), df["tweet"].values.tolist()
 
 
-def to_dict_of_lists(LD):
-
-    nd = {}
-    for d in LD:
-        for k, v in d[0].items():
-            try:
-                nd[k].append(v)
-            except KeyError:
-                nd[k] = [v]
-    return nd
-
-
-def check_last_day(results_folder, date):
-
-    log_path = os.path.join(results_folder, "progress.log", )
-
-    if last_day_in_month(date):
-        with open(log_path, 'a') as f:
-            month = string_to_month_year(date)
-            f.write("'" + month + "',")
-
-
 def track_bug(results_folder, date, tweet, bug):
     log_folder = os.path.join(results_folder, "bug")
     if not os.path.exists(log_folder):
@@ -154,5 +141,4 @@ def track_bug(results_folder, date, tweet, bug):
     log_path = os.path.join(log_folder, f"{date}.log")
 
     with open(log_path, 'a') as f:
-        bug = f"{date}, {tweet}, {bug} "
-        f.write(bug + "\n")
+        f.write(f"{date}, {tweet}, {bug} \n")
