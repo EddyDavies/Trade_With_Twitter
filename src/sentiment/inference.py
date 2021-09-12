@@ -102,16 +102,23 @@ def get_paths(reset=False,
     if not os.path.exists(data_folder):
         os.mkdir(data_folder)
 
-    raw_source_folder = f'{crypto}_tweets/'
+
+    try:
+        model_developer, model_name, = model_name.split('/', 1)
+    except:
+        pass
+
+    model_folder = '-'.join(model_name.split('-')[:4])
+    try:
+        model_folder = f"{model_folder}_{model_developer}"
+    except:
+        pass
+
     raw_results_folder = f'{crypto}_scores/'
+    raw_source_folder = f'{crypto}_tweets/'
 
-
-    model_developer, model_name, = txt.split('/', 1)
-
-    model_folder = f"{short_model_name}"
-
-    source_folder = os.path.join(data_folder, model_folder, raw_source_folder)
-    results_folder = os.path.join(data_folder, model_folder, raw_results_folder)
+    source_folder = os.path.join(data_folder, raw_source_folder, model_folder)
+    results_folder = os.path.join(data_folder, raw_results_folder, model_folder)
 
     # if not os.path.exists(results_folder):
     #     throw
