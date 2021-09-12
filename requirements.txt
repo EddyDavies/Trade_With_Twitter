@@ -5,7 +5,7 @@
 # torch==1.8.0
 pandas
 transformers[torch]
-# emoji
+emoji
 # nltk
 # pycoingecko
 # pandas_ta
