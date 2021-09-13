@@ -4,8 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 from transformers import pipeline
 
-from sentiment.utils import to_dict_of_lists
-from utils import string_to_month_year
+from utils import string_to_month_year, to_dict_of_lists
 
 
 # This attempt at a class is so wrong
@@ -45,7 +44,7 @@ def get_sentiments(
 
     scaled_tweets, scaled_length = scale_tweet_list(percentage_per_chunk, save_every, tweets)
 
-    i = 0
+    i, saves = 0, 0
     results = []
     for tweet in tqdm(scaled_tweets, desc=date):
 
@@ -58,10 +57,13 @@ def get_sentiments(
 
         i += 1
         if i % save_every == 0:
-            save_sentiments(ids[:scaled_length], results, results_folder, date)
+            saves += 1
+            save_legnth = saves * save_every
+            save_sentiments(ids[:save_legnth], results, results_folder, date)
         if i >= scaled_length:
             break
-    return results
+
+    save_sentiments(ids[:scaled_length], results, results_folder, date)
 
 
 def save_sentiments(ids, results, results_folder, date):
@@ -96,25 +98,24 @@ def get_paths(reset=False,
               crypto='bitcoin',
               data_folder='../data',
               model_name=None):
+    # ToDo move model name to start and make not kwarg
     # if reset:
     #  ToDo Remove old data
 
-    if not os.path.exists(data_folder):
-        os.mkdir(data_folder)
+    if model_name:
+        try:
+            model_developer, model_name, = model_name.split('/', 1)
+        except:
+            pass
 
-    try:
-        model_developer, model_name, = model_name.split('/', 1)
-    except:
-        pass
+        model_folder = '-'.join(model_name.split('-')[:4])
+        try:
+            model_folder = f"{model_folder}_{model_developer}"
+        except:
+                pass
+    else:
+        model_folder = "distilbert-base-uncased-finetuned"
 
-    model_folder = '-'.join(model_name.split('-')[:4])
-    try:
-        model_folder = f"{model_folder}_{model_developer}"
-    except:
-        pass
-
-    if not os.path.exists(model_folder):
-        os.mkdir(model_folder)
 
     raw_results_folder = f'{crypto}_scores/'
     raw_source_folder = f'{crypto}_tweets/'
@@ -126,7 +127,7 @@ def get_paths(reset=False,
     #     throw
 
     if not os.path.exists(results_folder):
-        os.mkdir(results_folder)
+        os.mkdirs(results_folder)
 
     return source_folder, results_folder
 
