@@ -4,8 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 from transformers import pipeline
 
-from sentiment.utils import to_dict_of_lists
-from utils import string_to_month_year
+from utils import string_to_month_year, to_dict_of_lists
 
 
 # This attempt at a class is so wrong
