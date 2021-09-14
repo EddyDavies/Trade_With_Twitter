@@ -84,7 +84,7 @@ def get_sentiments(
         #     save_legnth = saves * save_every
         #     save_sentiments(ids[:save_legnth], results, results_folder, date)
 
-    save_sentiments(scaled_ids, results, results_folder, date)
+    save_sentiments(scaled_ids, full_results, results_folder, date)
 
 
 def save_sentiments(ids, results, results_folder, date):
