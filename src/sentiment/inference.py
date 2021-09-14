@@ -127,7 +127,7 @@ def get_paths(reset=False,
     #     throw
 
     if not os.path.exists(results_folder):
-        os.mkdirs(results_folder)
+        os.makedirs(results_folder)
 
     return source_folder, results_folder
 
