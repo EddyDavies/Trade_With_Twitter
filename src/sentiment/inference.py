@@ -56,14 +56,14 @@ def get_sentiments(
             track_bug(results_folder, date, tweet, bug)
 
         i += 1
-        if i % save_every == 0:
-            saves += 1
-            save_legnth = saves * save_every
-            save_sentiments(ids[:save_legnth], results, results_folder, date)
+        # if i % save_every == 0:
+        #     saves += 1
+        #     save_legnth = saves * save_every
+        #     save_sentiments(ids[:save_legnth], results, results_folder, date)
         if i >= scaled_length:
+            save_sentiments(ids[:scaled_length], results, results_folder, date)
             break
 
-    save_sentiments(ids[:scaled_length], results, results_folder, date)
 
 
 def save_sentiments(ids, results, results_folder, date):
