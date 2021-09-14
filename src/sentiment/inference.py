@@ -48,6 +48,7 @@ def get_sentiments(
         save_every=2000,
         percentage_per_chunk=5,
         slice_size=None,
+        batch_size=100,
         chunk=0):
 
     """"""
@@ -63,7 +64,7 @@ def get_sentiments(
     full_results = []
 
     pred_dataset = SimpleDataset(scaled_tweets, slice_size)
-    dataloader = DataLoader(pred_dataset, batch_size=100, shuffle=False, pin_memory=True)
+    dataloader = DataLoader(pred_dataset, batch_size=batch_size, shuffle=False, pin_memory=True)
 
     for tweets in tqdm(dataloader, desc=date):
 
