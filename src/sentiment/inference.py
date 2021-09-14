@@ -59,7 +59,7 @@ def get_sentiments(
 
     scaled_tweets, scaled_length = scale_tweet_list(percentage_per_chunk, save_every, tweets)
 
-    i, saves = 0, 0
+    # i, saves = 0, 0
     full_results = []
 
     pred_dataset = SimpleDataset(scaled_tweets, slice_size)
@@ -74,14 +74,13 @@ def get_sentiments(
         # except ValueError as bug:
         #     track_bug(results_folder, date, tweet, bug)
 
-        i += 1
+        # i += 1
         # if i % save_every == 0:
         #     saves += 1
         #     save_legnth = saves * save_every
         #     save_sentiments(ids[:save_legnth], results, results_folder, date)
-        if i >= scaled_length:
-            save_sentiments(ids[:scaled_length], results, results_folder, date)
-            break
+
+    save_sentiments(ids[:scaled_length], results, results_folder, date)
 
 
 def save_sentiments(ids, results, results_folder, date):
