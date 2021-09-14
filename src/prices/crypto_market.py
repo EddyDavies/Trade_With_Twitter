@@ -76,11 +76,12 @@ class TimePeriod:
 @dataclass
 class MarketDataRecord:
     date: str
-    period: Literal["daily"]
     open_price: float
     close_price: float
     percent_change_open: float
     percent_change_close: float
+    volume: float
+    market_cap: float
 
 
 # @dataclass
@@ -134,8 +135,9 @@ class CryptoMarketUtils:
         time_period_filter_fn = (
             lambda date: time_period.is_simple_date_within_time_period(date)) if time_period is not None else (
             lambda _: True)
-        return [MarketDataRecord(date, "daily", data["Open"], data["Close"],
-                                 data["percentage_diff_open"], data["percentage_diff_close"])
+        return [MarketDataRecord(date, data["Open"], data["Close"],
+                                 data["percentage_diff_open"], data["percentage_diff_close"],
+                                 data["Volume"], data["Market_Cap"])
                 for date, data in zip(crypto_data_dates, crypto_data_processed)
                 if time_period_filter_fn(date)]
 
@@ -148,7 +150,32 @@ class CryptoMarketUtils:
         :return: the dataframe as an appropriate dictionary
         """
         prices = cg_data["prices"]
-        return [{"Open": price[1], "Close": price[1]} for price in prices]
+        volumes = cg_data["total_volumes"]
+        market_caps = cg_data["market_caps"]
+
+        market_data = []
+        for x, price in enumerate(prices):
+
+            try:
+                market_cap = market_caps[x][1]
+            except:
+                market_cap = 0
+            try:
+                volume = volumes[x][1]
+            except:
+                volume = 0
+
+            day_data = {
+                "Open": price[1],
+                 "Close": price[1],
+                 "Volume": volume,
+                 "Market_Cap": market_cap
+            }
+
+            market_data.append(day_data)
+
+        return market_data
+        # return [{"Open": price[1], "Close": price[1]} for price in prices]
 
 
     def _process_market_data(self, market_data_dicts: List[Dict]) -> List[Dict]:
