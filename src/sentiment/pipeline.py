@@ -19,11 +19,13 @@ if __name__ == '__main__':
         ids, tweets = get_tweets(date)
 
         percentage_per_chunk = 1
-        save_every = 2000
+        save_every = 200
         get_sentiments(date, tweets, ids, results_folder,
                          sentiment_analysis=sentiment_analysis,
                          save_every=save_every,
-                         percentage_per_chunk=percentage_per_chunk)
+                         percentage_per_chunk=percentage_per_chunk,
+                         slice_size=None,
+                         batch_size=100)
 
         check_last_day(results_folder, date)
 

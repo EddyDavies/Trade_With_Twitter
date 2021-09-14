@@ -58,7 +58,10 @@ def get_sentiments(
     if sentiment_analysis is None:
         sentiment_analysis = pipeline("sentiment-analysis")
 
-    scaled_tweets, scaled_length = scale_tweet_list(percentage_per_chunk, save_every, tweets)
+    if percentage_per_chunk == 100:
+        scaled_tweets, scaled_ids = tweets, ids
+    else:
+        scaled_tweets, scaled_ids = scale_tweet_list(percentage_per_chunk, save_every, tweets, ids)
 
     # i, saves = 0, 0
     full_results = []
@@ -81,7 +84,7 @@ def get_sentiments(
         #     save_legnth = saves * save_every
         #     save_sentiments(ids[:save_legnth], results, results_folder, date)
 
-    save_sentiments(ids[:scaled_length], results, results_folder, date)
+    save_sentiments(scaled_ids, results, results_folder, date)
 
 
 def save_sentiments(ids, results, results_folder, date):
@@ -96,7 +99,7 @@ def save_sentiments(ids, results, results_folder, date):
     df.to_csv(results_path, mode="a", header=False, index=False)
 
 
-def scale_tweet_list(percentage_per_chunk, save_every, tweets):
+def scale_tweet_list(percentage_per_chunk, save_every, tweets, ids):
     # scales to minimum of the save_every time size
 
     length_of_tweets = len(tweets)
@@ -109,7 +112,8 @@ def scale_tweet_list(percentage_per_chunk, save_every, tweets):
         last_tweet = save_every
 
     scaled_tweets = tweets[:last_tweet]
-    return scaled_tweets, last_tweet
+    scaled_ids = ids[:last_tweet]
+    return scaled_tweets, scaled_ids
 
 
 def get_paths(reset=False,
