@@ -155,12 +155,18 @@ if __name__ == "__main__":
 def to_dict_of_lists(LD):
 
     nd = {}
+
     for d in LD:
-        for k, v in d[0].items():
-            try:
-                nd[k].append(v)
-            except KeyError:
-                nd[k] = [v]
+        try:
+            nd['score'].append(d['score'])
+        except KeyError:
+            nd['score'] = [d['score']]
+
+        try:
+            nd['label'].append(d['label'])
+        except KeyError:
+            nd['label'] = [d['label']]
+
     return nd
 
 
