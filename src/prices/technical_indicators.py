@@ -16,7 +16,8 @@ if __name__ == '__main__':
     # VWAP requires the DataFrame index to be a DatetimeIndex.
     # Replace "datetime" with the appropriate column from your DataFrame
     df.set_index(pd.DatetimeIndex(df["date"]), inplace=True)
-    df = df[['open_price', 'close_price', 'percent_change_open', 'percent_change_close']]
+    df = df[['open_price', 'close_price', 'percent_change_open', 'percent_change_close',
+             'volume', 'market_cap']]
 
 
     CustomStrategy = ta.Strategy(
@@ -47,8 +48,8 @@ if __name__ == '__main__':
     df.plot(x='date', y='close_price', figsize=(15, 6), linestyle='--', marker='*', markerfacecolor='r', color='y',
             markersize=10)
 
-    plt.xlabel('Date')
-    plt.ylabel('Price')
+    # plt.xlabel('Date')
+    # plt.ylabel('Price')
     plt.show()
 
     # Take a peek
