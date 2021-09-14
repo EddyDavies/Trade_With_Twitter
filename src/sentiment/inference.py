@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from tqdm import tqdm
 from transformers import pipeline
+from torch.utils.data import Dataset, DataLoader
 
 from utils import string_to_month_year, to_dict_of_lists
 
@@ -24,6 +25,19 @@ from utils import string_to_month_year, to_dict_of_lists
 #     # model_kwargs: Dict[str, Any] = {},
 #     # **kwargs
 # )
+class SimpleDataset(Dataset):
+    def __init__(self, texts, slice_size=None):
+        if slice_size:
+            self.texts = [text[:125] for text in texts]
+        else:
+            self.texts = texts
+
+    def __len__(self):
+        return len(self.texts)
+
+    def __getitem__(self, idx):
+        return self.texts[idx]
+
 
 def get_sentiments(
         date,
@@ -33,6 +47,7 @@ def get_sentiments(
         sentiment_analysis=None,
         save_every=2000,
         percentage_per_chunk=5,
+        slice_size=None,
         chunk=0):
 
     """"""
@@ -45,15 +60,19 @@ def get_sentiments(
     scaled_tweets, scaled_length = scale_tweet_list(percentage_per_chunk, save_every, tweets)
 
     i, saves = 0, 0
-    results = []
-    for tweet in tqdm(scaled_tweets, desc=date):
+    full_results = []
 
-        try:
-            result = sentiment_analysis(tweet)
-            results.append(result)
+    pred_dataset = SimpleDataset(scaled_tweets, slice_size)
+    dataloader = DataLoader(pred_dataset, batch_size=100, shuffle=False, pin_memory=True)
 
-        except ValueError as bug:
-            track_bug(results_folder, date, tweet, bug)
+    for tweets in tqdm(dataloader, desc=date):
+
+        # try:
+        results = sentiment_analysis(tweets)
+        full_results += results
+
+        # except ValueError as bug:
+        #     track_bug(results_folder, date, tweet, bug)
 
         i += 1
         # if i % save_every == 0:
@@ -63,7 +82,6 @@ def get_sentiments(
         if i >= scaled_length:
             save_sentiments(ids[:scaled_length], results, results_folder, date)
             break
-
 
 
 def save_sentiments(ids, results, results_folder, date):
