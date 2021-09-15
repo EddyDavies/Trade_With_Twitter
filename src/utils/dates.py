@@ -4,19 +4,6 @@ from datetime import datetime, timedelta, timezone
 from typing import List
 
 
-def check_for_duplicates(dictionary_list, item):
-    # check no duplicates in list of dictionaries
-
-    items = []
-    for dictionary in dictionary_list:
-        items.append(dictionary[item])
-
-    if len(items) == len(set(items)):
-        return False
-    else:
-        return True
-
-
 def twitter_date_format(date: str, time_string=None, end_of_day=False):
     # convert date in '%Y-%m-%d' format into twitter date format
 
@@ -138,36 +125,10 @@ def get_month_array(month_range):
     return month_array
 
 
-def append_or_create_list(key: str, container: dict, content: dict):
-    if key not in container:
-        container[key] = [content]
-    else:
-        container[key].append(content)
-    return container
-
-
 if __name__ == "__main__":
     print(get_date_array(get_date_range(["Jan 17"])))
 
     # months = get_month_array(["Jan 18", "Jun 21"])
-
-
-def to_dict_of_lists(LD):
-
-    nd = {}
-
-    for d in LD:
-        try:
-            nd['score'].append(d['score'])
-        except KeyError:
-            nd['score'] = [d['score']]
-
-        try:
-            nd['label'].append(d['label'])
-        except KeyError:
-            nd['label'] = [d['label']]
-
-    return nd
 
 
 def check_last_day(results_folder, date):
