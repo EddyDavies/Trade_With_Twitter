@@ -12,18 +12,19 @@ def select_data_type(style, crypto, data_folder, model_folder):
     sa_metrics_folder = os.path.join(data_folder, f"{model_folder}_metrics.csv")
 
     df_prices = pd.read_csv(prices_folder)
-    df_prices.set_index(pd.DatetimeIndex(df_prices["date"]), inplace=True)
+    df_prices.set_index("date", inplace=True)
 
     if 'ta' in style:
         df_ta = pd.read_csv(ta_folder)
-        df_ta.set_index(pd.DatetimeIndex(df_ta["date"]), inplace=True)
+        df_ta.set_index("date", inplace=True)
+        # df_ta.set_index(pd.DatetimeIndex(df_ta["date"]), inplace=True)
         df = pd.concat([df_prices, df_ta], axis=1)
     if 'sa' in style:
         if 'metrics' in style:
             df_sa = pd.read_csv(sa_metrics_folder, names=['date', 'pos', 'neu'])
         else:
             df_sa = pd.read_csv(sa_folder, names=['date', 'pos', 'neu'])
-        df_sa.set_index(pd.DatetimeIndex(df_sa["date"]), inplace=True)
+        df_sa.set_index("date", inplace=True)
         df = pd.concat([df_prices, df_sa], axis=1)
 
     if 'ta' in style and 'sa' in style:
@@ -49,6 +50,8 @@ if __name__ == '__main__':
     styles = ['ta_sa', 'ta', 'sa', 'p']
     for style in styles:
         df = select_data_type(style, crypto, data_folder, model_folder)
+        for column in df.columns:
+            df[column] = df[column] / df[column].abs().max()
 
         merge_path = os.path.join(merge_folder, f"{crypto}_{style}.csv")
         df.to_csv(merge_path)

@@ -28,7 +28,8 @@ class Stonks:
     ):
         # The shape of the state returned at each time step and the number of actions the agent can make
         self.observation_shape = window_size + 1,
-        self.observation_shape = ((window_size * 2) + 1) if use_sentiment else (window_size + 1),
+        # self.observation_shape = ((window_size * 2) + 1) if use_sentiment else (window_size + 1),
+        self.observation_shape = 7,
         self.actions = 3
 
         self.training_dataset_filepath = training_dataset_filepath
@@ -167,20 +168,37 @@ class Stonks:
         """
         assert self.data is not None
 
+
+        # col = self.data["percent_change_close"]
+        # window_value = self.data["percent_change_close"][self._step - self.window_size:self._step].to_numpy().copy()
+        # positive_window = self.data["Positive"][self._step - self.window_size:self._step].to_numpy().copy()
+        # negative_window = self.data["Negative"][self._step - self.window_size:self._step].to_numpy().copy()
+        #
+        # # Add an int to describe whether we've invested
+        # observations = []
+        # observations.append(window_value)
+        # observations.append(np.array([int(self._portfolio > 0)]))
+        # # current capital, not invested
+        # # current value of invested in BTC
+        # if self.use_sentiment:
+        #     observations.append(positive_window-negative_window)
+        #
+
         # Add an int to describe whether we've invested
         observations = []
         names = self.data.columns
         for name in names:
-            obs = self.data[name][self._step - self.window_size:self._step].to_numpy().copy()
-            observations.append(obs)
+            # obs = self.data[name][self._step - self.window_size:self._step].to_numpy().copy()
+            obvs = self.data[name][self._step].copy()
+            observations.append(obvs)
 
-
-        observations.append(np.array([int(self._portfolio > 0)]))
+        observations.append(int(self._portfolio > 0))
         # current capital, not invested
         # current value of invested in BTC
         # Add LowPass instead of MMA and other technical indicators
 
-        return np.concatenate(observations)
+        # return np.concatenate(observations)
+        return observations
 
     def _perform_action(self, action: int):
         """
@@ -271,4 +289,4 @@ class Stonks:
 
     @staticmethod
     def _load_data(dataset_filepath: str) -> pd.DataFrame:
-        return pd.read_csv(dataset_filepath)
+        return pd.read_csv(dataset_filepath, index_col='date')

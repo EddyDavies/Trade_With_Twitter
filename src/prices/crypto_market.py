@@ -224,5 +224,5 @@ if __name__ == '__main__':
 
     cryptos = ["bitcoin", "ethereum"]
 
-    # cmu.generate_crypto_dataset(cryptos)
+    cmu.generate_crypto_dataset(cryptos)
     generate_ta(cryptos)

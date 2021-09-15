@@ -48,7 +48,10 @@ def generate_ta(cryptos):
         result_path = os.path.join(market_folder, f"{crypto}_ta.csv")
         df.to_csv(result_path)
 
+if __name__ == '__main__':
+    cryptos = ["bitcoin", "ethereum"]
 
+    generate_ta(cryptos)
 
     # Apply Strategy
     # df.ta.strategy(ta.CommonStrategy)

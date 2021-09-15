@@ -10,7 +10,8 @@ TRAIN_EPOCHS = 4
 LR = 0.0001
 
 WINDOW_SIZE = 8
-HIDDEN_DIMS = 16
+# HIDDEN_DIMS = 16
+HIDDEN_DIMS = 12
 USE_SENTIMENT = False
 
 
@@ -49,6 +50,7 @@ if __name__ == '__main__':
     )
 
     # logger = Logger(plot=f"StOnKs {'No ' if not USE_SENTIMENT else ''}Sentiment ↗")
+    logger = Logger(plot=f"StOnKs Sentiment ↗")
     testing_callback = TestOnEpochEndCallback(testing_env, agent, render=False, action=lambda a: a[0])
 
     for epoch, episode in Epochs(50, 25, callbacks=[testing_callback]):
