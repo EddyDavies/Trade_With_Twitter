@@ -180,9 +180,6 @@ class Stonks:
         # current value of invested in BTC
         # Add LowPass instead of MMA and other technical indicators
 
-        if self.use_sentiment:
-            observations.append(positive_window-negative_window)
-
         return np.concatenate(observations)
 
     def _perform_action(self, action: int):

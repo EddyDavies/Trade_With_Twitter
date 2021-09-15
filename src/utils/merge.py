@@ -42,7 +42,7 @@ if __name__ == '__main__':
     model_folder = convert_model_name("finiteautomata/bertweet-base-sentiment-analysis")
 
     data_folder = '../data'
-    merge_folder = os.path.join(data_folder, "merge")
+    merge_folder = os.path.join(data_folder, "trade")
     if not os.path.exists(merge_folder):
         os.mkdir(merge_folder)
 
