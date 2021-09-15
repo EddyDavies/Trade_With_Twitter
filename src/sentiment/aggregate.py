@@ -99,32 +99,3 @@ if __name__ == '__main__':
             f.write(f"{date}, {pos_percent}, {neu_percent} \n")
 
 
-
-    if not weight:
-        return df
-    else:
-        pass
-
-if __name__ == '__main__':
-
-    dates_range = ("2017-01-01", "2021-05-31")
-    dates_range = ("2017-01-01", "2017-02-28")
-    dates = get_date_array(dates_range)
-
-    data_folder = '../data'
-    model_name = "finiteautomata/bertweet-base-sentiment-analysis"
-    _, scores_folder = get_paths(data_folder=data_folder, model_name=model_name)
-
-    for date in dates:
-        df = get_tweets(date, scores_folder)
-
-        df = meta_data_weight(df)
-
-        pos_percent, neu_percent = extract_percents(df)
-
-        model_csv = f"{convert_model_name(model_name)}.csv"
-        result_path = os.path.join(data_folder, model_csv)
-        with open(result_path, 'a') as f:
-            f.write(f"{date}, {pos_percent}, {neu_percent} \n")
-
-
