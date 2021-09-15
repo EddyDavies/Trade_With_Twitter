@@ -6,8 +6,8 @@ import pandas as pd
 
 
 STOCKS = [
-    "AAPL",
-    # "BTC-USD",
+    # "AAPL",
+    "BTC-USD",
     # "INTC",
 ]
 
