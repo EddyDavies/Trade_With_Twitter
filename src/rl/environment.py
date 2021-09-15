@@ -26,7 +26,7 @@ class Stonks:
             testing=False,
             window_size=10,
     ):
-        # The shape of the state returned at each time step and the number of actions the agnet can make
+        # The shape of the state returned at each time step and the number of actions the agent can make
         self.observation_shape = window_size + 1,
         self.observation_shape = ((window_size * 2) + 1) if use_sentiment else (window_size + 1),
         self.actions = 3
@@ -64,7 +64,7 @@ class Stonks:
         """
         Reset the environment.
 
-        Reset the environment and load up a new stock to load then reutrns the current observation.
+        Reset the environment and load up a new stock to load then returns the current observation.
 
         Returns:
             Current environment observation.
@@ -167,18 +167,19 @@ class Stonks:
         """
         assert self.data is not None
 
-        col = self.data["percent_change_close"]
-        window_value = self.data["percent_change_close"][self._step - self.window_size:self._step].to_numpy().copy()
-        positive_window = self.data["Positive"][self._step - self.window_size:self._step].to_numpy().copy()
-        negative_window = self.data["Negative"][self._step - self.window_size:self._step].to_numpy().copy()
-
         # Add an int to describe whether we've invested
         observations = []
-        observations.append(window_value)
+        names = self.data.columns
+        for name in names:
+            obs = self.data[name][self._step - self.window_size:self._step].to_numpy().copy()
+            observations.append(obs)
+
+
         observations.append(np.array([int(self._portfolio > 0)]))
         # current capital, not invested
         # current value of invested in BTC
         # Add LowPass instead of MMA and other technical indicators
+
         if self.use_sentiment:
             observations.append(positive_window-negative_window)
 

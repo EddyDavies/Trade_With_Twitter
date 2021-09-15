@@ -10,23 +10,8 @@ import matplotlib as plt
 from typing import Optional, List, Literal, Dict, Iterable, TypeVar, Tuple, cast, Generator
 import os
 
-if __name__ == '__main__':
 
-    df = pd.DataFrame() # Empty DataFrame
-    crypto = "bitcoin"
-    crypto = "ethereum"
-
-    # Load data
-    data_folder = "../data"
-    market_folder = os.path.join(data_folder, "market-data")
-    source = os.path.join(market_folder, f"{crypto}.csv")
-    df = pd.read_csv(source, sep=",")
-
-    df.set_index(pd.DatetimeIndex(df["date"]), inplace=True)
-    df = df[['open_price', 'close_price', 'percent_change_open', 'percent_change_close',
-             'volume', 'market_cap']]
-
-
+def generate_ta(cryptos):
     CustomStrategy = ta.Strategy(
         name="Momo and Volatility",
         description="SMA 50,200, BBANDS, RSI, MACD and Volume SMA 20",
@@ -39,33 +24,49 @@ if __name__ == '__main__':
             {"kind": "sma", "close": "volume", "length": 20, "prefix": "VOLUME"},
         ]
     )
-    # To run your "Custom Strategy"
-    df.ta.strategy(CustomStrategy)
+
+    data_folder = "../data"
+    market_folder = os.path.join(data_folder, "market-data")
+
+    for crypto in cryptos:
+
+        source = os.path.join(market_folder, f"{crypto}.csv")
+        df = pd.read_csv(source, sep=",")
+
+        df.set_index(pd.DatetimeIndex(df["date"]), inplace=True)
+        names = ['open_price', 'close_price', 'percent_change_open', 'percent_change_close', 'volume', 'market_cap']
+        df = df[names]
+
+        # To run your "Custom Strategy"
+        df.ta.strategy(CustomStrategy)
+        df.drop(names, axis=1, inplace=True)
+
+        # New Columns with results
+        # df.columns
+        # df.reset_index(inplace=True)
+
+        result_path = os.path.join(market_folder, f"{crypto}_ta.csv")
+        df.to_csv(result_path)
+
+
 
     # Apply Strategy
     # df.ta.strategy(ta.CommonStrategy)
     #
     # df.ta.log_return(cumulative=True, append=True)
     # df.ta.percent_return(cumulative=True, append=True)
-
-    # New Columns with results
-    df.columns
-    df.reset_index(inplace=True)
-
-    df.plot(x='date', y='close_price', figsize=(15, 6), linestyle='--', marker='*', markerfacecolor='r', color='y',
-            markersize=10)
-
-
-    result = os.path.join(market_folder, f"{crypto}_ta.csv")
-    df.to_csv(result)
+    #
+    # df.plot(x='date', y='close_price', figsize=(15, 6), linestyle='--', marker='*', markerfacecolor='r', color='y',
+    #         markersize=10)
+    #
 
 
     # plt.xlabel('Date')
     # plt.ylabel('Price')
-    plt.show()
-
-    # Take a peek
-    df.tail()
+    # plt.show()
+    #
+    # # Take a peek
+    # df.tail()
 
 
 # class TechnicalAnalysisUtils:

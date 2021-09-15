@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 from copy import deepcopy
 from pycoingecko import CoinGeckoAPI
 
+from prices.technical_indicators import generate_ta
+
 
 class ApiKeyEnvVarMissing(Exception):
     pass
@@ -116,7 +118,7 @@ class CryptoMarketUtils:
             os.mkdir(save_dir)
 
         for crypto, df in zip(cryptos, dataframes):
-            df.to_csv(f'{save_dir}/{crypto}.csv')
+            df.to_csv(f'{save_dir}/{crypto}.csv', index=False)
 
         return dataframes
 
@@ -220,4 +222,7 @@ class CryptoMarketUtils:
 if __name__ == '__main__':
     cmu = CryptoMarketUtils()
 
-    cmu.generate_crypto_dataset(["bitcoin", "ethereum"])
+    cryptos = ["bitcoin", "ethereum"]
+
+    # cmu.generate_crypto_dataset(cryptos)
+    generate_ta(cryptos)
