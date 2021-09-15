@@ -10,21 +10,22 @@ TRAIN_EPOCHS = 4
 LR = 0.0001
 
 WINDOW_SIZE = 8
-# HIDDEN_DIMS = 16
-HIDDEN_DIMS = 12
+HIDDEN_DIMS = 42
 USE_SENTIMENT = False
 
-data_folder = "../data"
 
 if __name__ == '__main__':
     path = "/trade/bitcoin_ta_sa_metrics.csv"
-    path = "/trade/bitcoin_ta_sa.csv"
     path = "/trade/bitcoin_sa.csv"
     path = "/trade/bitcoin_ta.csv"
 
     path = "/trade/bitcoin_p.csv"
+    path = "/trade/bitcoin_ta_sa.csv"
 
-    path = data_folder + path
+
+    # path = data_folder + path
+    path = "../data" + path
+
 
 
     env = Stonks(
@@ -45,7 +46,7 @@ if __name__ == '__main__':
     # print(f"{'No ' if not USE_SENTIMENT else ''}Sentiment")
 
     agent = PPO(
-        input_dims=env.observation_shape[0],
+        input_dims=env.observation_shape,
         n_actions=env.actions,
         batch_size=BATCH_SIZE,
         alpha=LR,

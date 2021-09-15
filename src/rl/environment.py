@@ -27,9 +27,8 @@ class Stonks:
             window_size=10,
     ):
         # The shape of the state returned at each time step and the number of actions the agent can make
-        self.observation_shape = window_size + 1,
         # self.observation_shape = ((window_size * 2) + 1) if use_sentiment else (window_size + 1),
-        self.observation_shape = 7,
+        self.observation_shape = len(list(pd.read_csv(training_dataset_filepath).columns)[1:])+1
         self.actions = 3
 
         self.training_dataset_filepath = training_dataset_filepath
@@ -78,6 +77,7 @@ class Stonks:
         # Load up a chosen currency to run
         self.currency = np.random.choice(STOCKS)
         self.data = self._load_data(self.training_dataset_filepath)
+        self.observation_shape = self.data.shape[1]
 
         self._step = self.window_size
         self.__end_step = (len(self.data) // 4) * 3
@@ -205,7 +205,7 @@ class Stonks:
         Interact with the environment to purchase crypto.
 
         This function adds buy and sell functionality into the environment. The number of coins purchased is calculated
-        by dividing the _wallet with the current _crypto_value. When selling we simply multiply the currnet value by
+        by dividing the _wallet with the current _crypto_value. When selling we simply multiply the current value by
         the number of coins owned.
 
         TODO: Incoperate transaction fees.
