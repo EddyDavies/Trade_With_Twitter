@@ -1,4 +1,3 @@
-import hodl.data_collection.utils
 from .logger import Logger
 
 
@@ -23,7 +22,7 @@ class SaveAgentCallback(EpochCallback):
         self.file_name = file_name
 
     def on_epoch_end(self, e):
-        hodl.data_collection.utils.save(self.file_name(e) if type(self.file_name) != str else self.file_name)
+        save(self.file_name(e) if type(self.file_name) != str else self.file_name)
 
 
 class TestOnEpochEndCallback(EpochCallback):
@@ -56,3 +55,15 @@ class SaveLoggerCallback(EpochCallback):
 
     def on_epoch_end(self, e):
         self.logger.save(self.file_name(e) if type(self.file_name) != str else self.file_name)
+
+
+def save(data, path):
+    try:
+        with open(path, 'r') as f:
+            current_data = json.load(f)
+    except:
+        current_data= {}
+
+    with open(path, 'w') as f:
+        current_data.update(data)
+        json.dump(current_data, f, indent=4)
