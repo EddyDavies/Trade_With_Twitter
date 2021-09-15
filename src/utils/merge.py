@@ -12,7 +12,6 @@ def select_data_type(style, crypto, data_folder, model_folder):
     sa_metrics_folder = os.path.join(data_folder, f"{model_folder}_metrics.csv")
 
     df_prices = pd.read_csv(prices_folder)
-    df_prices.set_index("date", inplace=True)
 
     if 'ta' in style:
         df_ta = pd.read_csv(ta_folder)
@@ -32,6 +31,8 @@ def select_data_type(style, crypto, data_folder, model_folder):
 
     if 'p' in style:
         df = df_prices
+
+    df.set_index("date", inplace=True)
 
     return df
 
