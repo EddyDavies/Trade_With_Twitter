@@ -24,7 +24,7 @@ def select_data_type(style, crypto, data_folder, model_folder):
             df_sa = pd.read_csv(sa_metrics_folder, names=['date', 'pos', 'neu'])
         else:
             df_sa = pd.read_csv(sa_folder, names=['date', 'pos', 'neu'])
-        df_sa.set_index("date", inplace=True)
+        # df_sa.set_index("date", inplace=True)
         df = pd.concat([df_prices, df_sa], axis=1)
 
     if 'ta' in style and 'sa' in style:
