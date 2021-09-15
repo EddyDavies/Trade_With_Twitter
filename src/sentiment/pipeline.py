@@ -5,7 +5,7 @@ from utils import get_date_array, get_month_array, string_to_month_year, last_da
 
 if __name__ == '__main__':
 
-    dates_range = ("2017-01-01", "2021-06-20")
+    dates_range = ("2017-01-01", "2021-05-31")
     months_range = ["Jan 17", "Jun 21"]
 
     months = get_month_array(months_range)
@@ -26,8 +26,6 @@ if __name__ == '__main__':
                          percentage_per_chunk=percentage_per_chunk,
                          slice_size=None,
                          batch_size=100)
-
-        check_last_day(results_folder, date)
 
 
 
