@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-from sentiment.inference import get_paths, convert_model_name
+from sentiment.folder import convert_model_name
 
 
 def select_data_type(style, crypto, data_folder, model_folder):

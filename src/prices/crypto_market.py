@@ -215,6 +215,7 @@ class CryptoMarketUtils:
         :return:
         """
         a, b = tee(seq)
+
         next(b, None)
         return zip(a, b)
 
