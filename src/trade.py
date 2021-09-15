@@ -14,14 +14,18 @@ WINDOW_SIZE = 8
 HIDDEN_DIMS = 12
 USE_SENTIMENT = False
 
+data_folder = "../data"
 
 if __name__ == '__main__':
-    path = "../data/trade/bitcoin_ta_sa_metrics.csv"
-    path = "../data/trade/bitcoin_ta_sa.csv"
-    path = "../data/trade/bitcoin_sa.csv"
-    path = "../data/trade/bitcoin_ta.csv"
+    path = "/trade/bitcoin_ta_sa_metrics.csv"
+    path = "/trade/bitcoin_ta_sa.csv"
+    path = "/trade/bitcoin_sa.csv"
+    path = "/trade/bitcoin_ta.csv"
 
-    path = "../data/trade/bitcoin_p.csv"
+    path = "/trade/bitcoin_p.csv"
+
+    path = data_folder + path
+
 
     env = Stonks(
         currency="BTC",
