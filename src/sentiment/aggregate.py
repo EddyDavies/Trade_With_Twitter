@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 from sentiment.inference import get_paths, convert_model_name
-from utils import get_date_array
+from utils.dates import get_date_array
 
 def get_tweets(date, scores):
 

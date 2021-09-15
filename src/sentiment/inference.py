@@ -5,7 +5,8 @@ from tqdm import tqdm
 from transformers import pipeline
 from torch.utils.data import Dataset, DataLoader
 
-from utils import string_to_month_year, to_dict_of_lists
+from utils.dates import string_to_month_year
+from utils.lists_dicts import to_dict_of_lists
 
 
 # This attempt at a class is so wrong

@@ -1,8 +1,8 @@
-from hodl.rl.environment import Stonks
-from hodl.rl.ppo import PPO
-from hodl.rl.utils.callbacks import TestOnEpochEndCallback
-from hodl.rl.utils.epochs import Epochs
-from hodl.rl.utils.logger import Logger
+from rl.environment import Stonks
+from rl.ppo import PPO
+from rl.utils.callbacks import TestOnEpochEndCallback
+from rl.utils.epochs import Epochs
+from rl.utils.logger import Logger
 
 LEARN_STEPS = 20
 BATCH_SIZE = 5
@@ -15,11 +15,16 @@ USE_SENTIMENT = False
 
 
 if __name__ == '__main__':
+    path = "../data/trade/bitcoin.csv"
+    path = "../data/trade/bitcoin_ta.csv"
+    path = "../data/trade/bitcoin_ta_sa.csv"
+    path = "../data/trade/bitcoin_ta_sa_metrics.csv"
+
     env = Stonks(
         currency="BTC",
         use_sentiment=USE_SENTIMENT,
         window_size=WINDOW_SIZE,
-        training_dataset_filepath="../data/bitcoin_trading.csv"
+        training_dataset_filepath=path
     )
 
     testing_env = Stonks(
@@ -27,7 +32,7 @@ if __name__ == '__main__':
         use_sentiment=USE_SENTIMENT,
         window_size=WINDOW_SIZE,
         testing=True,
-        training_dataset_filepath="../data/bitcoin_trading.csv"
+        training_dataset_filepath=path
     )
 
     print(f"{'No ' if not USE_SENTIMENT else ''}Sentiment")
