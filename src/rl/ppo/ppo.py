@@ -93,7 +93,7 @@ class PPO:
 
                 critic_loss = (returns - critic_value) ** 2
 
-                total_loss = actor_loss + 0.5 * critic_loss #- 0.01 * dist.entropy()
+                total_loss = actor_loss + 0.5 * critic_loss - 0.01 * dist.entropy()
                 # Add or remove noise to force agent to explore a bit more
 
                 self.actor.optimizer.zero_grad()
