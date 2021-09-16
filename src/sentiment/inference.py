@@ -96,6 +96,9 @@ def save_sentiments(ids, results, results_folder, date):
     df = pd.DataFrame(outputs)
 
     date_csv = date + ".csv"
+    results_folder = os.path.normpath(results_folder)
+    if not os.path.exists(results_folder):
+        os.makedirs(results_folder)
     results_path = os.path.join(results_folder, date_csv)
     df.to_csv(results_path, mode="a", header=False, index=False)
 
@@ -117,13 +120,16 @@ def scale_tweet_list(percentage_per_chunk, save_every, tweets, ids):
     return scaled_tweets, scaled_ids
 
 
-def get_tweets(date, source='../data/bitcoin_tweets/'):
+def get_tweets(date, source):
 
     month = string_to_month_year(date)
-    path = source + month + "/MTurk_" + date + ".csv"
+    file_name = "MTurk_" + date + ".csv"
+    path = os.path.join(source, month, file_name)
 
     # with open(path) as f:
     path = os.path.normpath(path)
+    print(path)
+
     df = pd.read_csv(path)
 
     return df["id"].values.tolist(), df["tweet"].values.tolist()

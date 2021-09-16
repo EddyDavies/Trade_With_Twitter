@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     for date in dates:
         try:
-            ids, tweets = get_tweets(date)
+            ids, tweets = get_tweets(date, source)
         except:
             pass
 
@@ -26,7 +26,7 @@ if __name__ == '__main__':
                          sentiment_analysis=sentiment_analysis,
                          save_every=save_every,
                          percentage_per_chunk=percentage_per_chunk,
-                         slice_size=None,
+                         slice_size=1,
                          batch_size=100)
 
 
