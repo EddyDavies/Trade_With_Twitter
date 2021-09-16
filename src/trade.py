@@ -26,7 +26,7 @@ if __name__ == '__main__':
                   "_sa", "_ta", "_p"]
     run_type = f"{crypto}{date_types[0]}"
     if len(sys.argv) > 1:
-        run_type = f"{crypto}{date_types[sys.argv[1]]}"
+        run_type = f"{crypto}{date_types[int(sys.argv[1])]}"
 
     path = path.format(run_type)
     log_path = log_path.format(run_type)
