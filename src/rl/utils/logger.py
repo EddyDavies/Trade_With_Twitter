@@ -112,4 +112,5 @@ class Logger:
         with open(path, "w+") as file:
             file.write("i, min, avg, max, loss, time\n")
             for i, log in enumerate(self.__history):
-                file.write(f"{i}, {log['min']}, {log['avg']}, {log['max']}, {log['loss']}, {log['time']}\n")
+                # file.write(f"{i}, {log['min']}, {log['avg']}, {log['max']}, {log['loss']}, {log['time']}\n")
+                file.write(f"{i}, {log['min']}, {log['avg']}, {log['max']}, {log['time']}\n")

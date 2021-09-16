@@ -4,6 +4,8 @@ from rl.utils.callbacks import TestOnEpochEndCallback, SaveLoggerCallback
 from rl.utils.epochs import Epochs
 from rl.utils.logger import Logger
 
+import sys
+
 LEARN_STEPS = 20
 BATCH_SIZE = 5
 TRAIN_EPOCHS = 4
@@ -23,6 +25,9 @@ if __name__ == '__main__':
                   # "_ta_sa_metrics",
                   "_sa", "_ta", "_p"]
     run_type = f"{crypto}{date_types[0]}"
+    if len(sys.argv) > 1:
+        run_type = f"{crypto}{date_types[sys.argv[1]]}"
+
     path = path.format(run_type)
     log_path = log_path.format(run_type)
     print(path)
