@@ -21,7 +21,7 @@ if __name__ == '__main__':
     crypto = "bitcoin"
     date_types = ["_ta_sa",
                   # "_ta_sa_metrics",
-                  "_sa.csv", "_ta.csv", "_p"]
+                  "_sa", "_ta", "_p"]
     run_type = f"{crypto}{date_types[0]}"
     path = path.format(run_type)
     log_path = log_path.format(run_type)
