@@ -215,6 +215,7 @@ class CryptoMarketUtils:
         :return:
         """
         a, b = tee(seq)
+
         next(b, None)
         return zip(a, b)
 
@@ -224,5 +225,5 @@ if __name__ == '__main__':
 
     cryptos = ["bitcoin", "ethereum"]
 
-    # cmu.generate_crypto_dataset(cryptos)
+    cmu.generate_crypto_dataset(cryptos)
     generate_ta(cryptos)
