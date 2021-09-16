@@ -6,18 +6,19 @@ from utils.dates import get_date_array, get_month_array
 
 if __name__ == '__main__':
 
-    dates_range = ("2017-01-01", "2021-05-31")
-    months_range = ["Jan 17", "Jun 21"]
-
-    months = get_month_array(months_range)
+    dates_range = ("2019-01-01", "2021-05-31")
     dates = get_date_array(dates_range)
 
-    sentiment_analysis = pipeline("sentiment-analysis")
+    model_name = "siebert/sentiment-roberta-large-english"
+    sentiment_analysis = pipeline("sentiment-analysis", model=model_name, device=0)
 
     results_folder, source = get_paths(reset=True)
 
     for date in dates:
-        ids, tweets = get_tweets(date)
+        try:
+            ids, tweets = get_tweets(date)
+        except:
+            pass
 
         percentage_per_chunk = 1
         save_every = 200

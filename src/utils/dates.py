@@ -111,7 +111,7 @@ def get_month_array(month_range):
         current_string = datetime.strftime(current_month, "%b %y")
         month_array.append(current_string)
 
-        next_month = int(datetime.strftime(current_month, "%-m"))
+        next_month = int(datetime.strftime(current_month, "%m"))
         next_year = int(datetime.strftime(current_month, "%Y"))
 
         if next_month == 12:

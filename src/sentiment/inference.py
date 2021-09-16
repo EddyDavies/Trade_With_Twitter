@@ -122,8 +122,9 @@ def get_tweets(date, source='../data/bitcoin_tweets/'):
     month = string_to_month_year(date)
     path = source + month + "/MTurk_" + date + ".csv"
 
-    with open(path) as f:
-        df = pd.read_csv(f)
+    # with open(path) as f:
+    path = os.path.normpath(path)
+    df = pd.read_csv(path)
 
     return df["id"].values.tolist(), df["tweet"].values.tolist()
 
