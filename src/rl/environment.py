@@ -27,13 +27,8 @@ class Stonks:
             window_size=10,
     ):
         # The shape of the state returned at each time step and the number of actions the agent can make
-<<<<<<< Updated upstream
-        self.observation_shape = window_size + 1,
-        self.observation_shape = ((window_size * 2) + 1) if use_sentiment else (window_size + 1),
-=======
         # self.observation_shape = ((window_size * 2) + 1) if use_sentiment else (window_size + 1),
         self.observation_shape = (window_size * len(list(pd.read_csv(training_dataset_filepath).columns)[1:]))+1
->>>>>>> Stashed changes
         self.actions = 3
 
         self.training_dataset_filepath = training_dataset_filepath
@@ -82,6 +77,7 @@ class Stonks:
         # Load up a chosen currency to run
         self.currency = np.random.choice(STOCKS)
         self.data = self._load_data(self.training_dataset_filepath)
+        self.observation_shape = self.data.shape[1]
 
         self._step = self.window_size
         self.__end_step = (len(self.data) // 4) * 3
@@ -172,21 +168,12 @@ class Stonks:
         """
         assert self.data is not None
 
-<<<<<<< Updated upstream
-=======
 
 
->>>>>>> Stashed changes
         # Add an int to describe whether we've invested
         observations = []
         names = self.data.columns
         for name in names:
-<<<<<<< Updated upstream
-            obs = self.data[name][self._step - self.window_size:self._step].to_numpy().copy()
-            observations.append(obs)
-
-
-=======
             obvs = self.data[name][self._step - self.window_size:self._step].to_numpy().copy()
             # obvs = self.data[name][self._step].copy()
             observations.append(obvs)
@@ -207,28 +194,20 @@ class Stonks:
         #
 
         # observations.append(int(self._portfolio > 0))
->>>>>>> Stashed changes
         observations.append(np.array([int(self._portfolio > 0)]))
         # current capital, not invested
         # current value of invested in BTC
         # Add LowPass instead of MMA and other technical indicators
 
-<<<<<<< Updated upstream
-        if self.use_sentiment:
-            observations.append(positive_window-negative_window)
-
-        return np.concatenate(observations)
-=======
         return np.concatenate(observations)
         # return observations
->>>>>>> Stashed changes
 
     def _perform_action(self, action: int):
         """
         Interact with the environment to purchase crypto.
 
         This function adds buy and sell functionality into the environment. The number of coins purchased is calculated
-        by dividing the _wallet with the current _crypto_value. When selling we simply multiply the currnet value by
+        by dividing the _wallet with the current _crypto_value. When selling we simply multiply the current value by
         the number of coins owned.
 
         TODO: Incoperate transaction fees.
@@ -312,4 +291,4 @@ class Stonks:
 
     @staticmethod
     def _load_data(dataset_filepath: str) -> pd.DataFrame:
-        return pd.read_csv(dataset_filepath)
+        return pd.read_csv(dataset_filepath, index_col='date')

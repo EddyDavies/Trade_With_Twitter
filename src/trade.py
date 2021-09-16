@@ -15,12 +15,14 @@ USE_SENTIMENT = False
 
 
 if __name__ == '__main__':
-    path = "../data/trade/bitcoin_ta_sa_metrics.csv"
-    path = "../data/trade/bitcoin_ta_sa.csv"
-    path = "../data/trade/bitcoin_sa.csv"
-    path = "../data/trade/bitcoin_ta.csv"
 
-    path = "../data/trade/bitcoin_p.csv"
+    path = "../data/trade/{}.csv"
+    crypto = "bitcoin"
+    date_types = ["_ta_sa_metrics", "_ta_sa",
+                  "_sa.csv", "_ta.csv", "_p"]
+    run_type = f"{crypto}{date_types[4]}"
+    path = path.format(run_type)
+    print(path)
 
     env = Stonks(
         currency="BTC",
@@ -40,7 +42,7 @@ if __name__ == '__main__':
     # print(f"{'No ' if not USE_SENTIMENT else ''}Sentiment")
 
     agent = PPO(
-        input_dims=env.observation_shape[0],
+        input_dims=env.observation_shape,
         n_actions=env.actions,
         batch_size=BATCH_SIZE,
         alpha=LR,
@@ -48,7 +50,7 @@ if __name__ == '__main__':
         dims=HIDDEN_DIMS
     )
 
-    # logger = Logger(plot=f"StOnKs {'No ' if not USE_SENTIMENT else ''}Sentiment ↗")
+    logger = Logger(plot=f" Trading with {run_type} ↗")
     testing_callback = TestOnEpochEndCallback(testing_env, agent, render=False, action=lambda a: a[0])
 
     for epoch, episode in Epochs(50, 25, callbacks=[testing_callback]):
