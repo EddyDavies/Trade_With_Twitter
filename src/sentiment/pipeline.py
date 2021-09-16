@@ -1,6 +1,7 @@
 from transformers import pipeline
 
-from sentiment.inference import get_paths, get_tweets, get_sentiments
+from sentiment.inference import get_tweets, get_sentiments
+from sentiment.folder import get_paths
 from utils.dates import get_date_array, get_month_array
 
 if __name__ == '__main__':
