@@ -6,7 +6,7 @@ import pandas as pd
 from sentiment.folder import convert_model_name
 
 def convert_to_date(date, format='%Y-%m-%d'):
-    return datetime.strptime(date, '%Y-%m-%d')
+    return datetime.strptime(date, format)
 
 
 def load_date_index(prices_folder, names=None):
@@ -21,32 +21,29 @@ def load_date_index(prices_folder, names=None):
     return df
 
 
-def select_data_type(style, crypto, data_folder, model_folder):
+def select_data_type(style, crypto, data_folder, model_names):
+
+    model_folders = [convert_model_name(model) for model in model_names]
 
     prices_folder = os.path.join(data_folder, "market-data", f"{crypto}.csv")
-    ta_folder = os.path.join(data_folder, "market-data", f"{crypto}_ta.csv")
-    sa_folder = os.path.join(data_folder, f"{model_folder}.csv")
-    sa_metrics_folder = os.path.join(data_folder, f"{model_folder}_metrics.csv")
 
-    df_prices = load_date_index(prices_folder)
+    data = []
+    df = load_date_index(prices_folder)
+    df_ta, df_1sa, df_2sa = None, None, None
 
     if 'ta' in style:
+        ta_folder = os.path.join(data_folder, "market-data", f"{crypto}_ta.csv")
         df_ta = load_date_index(ta_folder)
+        data.append(df_ta)
 
-        df = pd.concat([df_prices, df_ta], axis=1)
     if 'sa' in style:
-        if 'metrics' in style:
-            df_sa = load_date_index(sa_metrics_folder, names=['date', 'pos', 'neu'])
-        else:
-            df_sa = load_date_index(sa_folder, names=['date', 'pos', 'neu'])
+        for x, model in enumerate(model_folders):
+            if str(x) in style:
+                sa_folder = os.path.join(data_folder, f"{model_folders[x]}.csv")
+                df_sa = load_date_index(sa_folder)
+                data.append(df_sa)
 
-        df = pd.concat([df_prices, df_sa], axis=1)
-
-    if 'ta' in style and 'sa' in style:
-        df = pd.concat([df_prices, df_sa, df_ta], axis=1)
-
-    if 'p' in style:
-        df = df_prices
+    df = pd.concat([df, df_1sa, df_2sa, df_ta], axis=1)
 
     begin = pd.Timestamp('2017-01-01 00:00:00')
     end = pd.Timestamp('2021-05-31 00:00:00')
@@ -60,17 +57,17 @@ def select_data_type(style, crypto, data_folder, model_folder):
 if __name__ == '__main__':
 
     crypto = 'bitcoin'
-    model_name = "finiteautomata/bertweet-base-sentiment-analysis"
-    model_folder = convert_model_name("finiteautomata/bertweet-base-sentiment-analysis")
+    model_names = ["finiteautomata/bertweet-base-sentiment-analysis",
+                  "siebert/sentiment-roberta-large-english"]
 
     data_folder = '../data'
     merge_folder = os.path.join(data_folder, "trade")
     if not os.path.exists(merge_folder):
         os.mkdir(merge_folder)
 
-    styles = ['ta_sa', 'ta', 'sa', 'p']
+    styles = ['ta_sa_12', 'ta_sa_2', 'ta_sa_1', 'sa_12', 'sa_2', 'sa_1', 'ta', 'p']
     for style in styles:
-        df = select_data_type(style, crypto, data_folder, model_folder)
+        df = select_data_type(style, crypto, data_folder, model_names)
         for column in df.columns:
             df[column] = df[column] / df[column].abs().max()
 
