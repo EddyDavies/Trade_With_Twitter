@@ -1,3 +1,5 @@
+import os
+
 from rl.environment import Stonks
 from rl.ppo import PPO
 from rl.utils.callbacks import TestOnEpochEndCallback, SaveLoggerCallback
@@ -15,22 +17,19 @@ WINDOW_SIZE = 100
 HIDDEN_DIMS = 24
 USE_SENTIMENT = False
 
+RAW_PATH = "../data/trade/{}.csv"
+LOG_FOLDER= "../data/trade/logs"
+CRYPTO = "bitcoin"
 
-if __name__ == '__main__':
+def run(data_type):
+    run_type = f"{CRYPTO}_{data_type}"
+    # if len(sys.argv) > 1:
+    #     run_type = f"{crypto}{date_types[int(sys.argv[1])]}"
 
-    path = "../data/trade/{}.csv"
-    log_path = "../data/trade/{}_log.csv"
-    crypto = "bitcoin"
-    date_types = ["_ta_sa",
-                  # "_ta_sa_metrics",
-                  "_sa", "_ta", "_p"]
-    run_type = f"{crypto}{date_types[0]}"
-    if len(sys.argv) > 1:
-        run_type = f"{crypto}{date_types[int(sys.argv[1])]}"
-
-    path = path.format(run_type)
-    log_path = log_path.format(run_type)
+    path = RAW_PATH.format(run_type)
+    log_path = os.path.join(LOG_FOLDER, f"{run_type}.csv")
     print(path)
+
 
     env = Stonks(
         currency="BTC",
@@ -74,3 +73,12 @@ if __name__ == '__main__':
             logger.log(epoch, episode, reward, info["assets"], action, done)
             observation = observation_
 
+if __name__ == '__main__':
+    if not os.path.exists(LOG_FOLDER):
+        os.makedirs(LOG_FOLDER)
+
+    data_types = ['ta_sa_12', 'ta_sa_2', 'ta_sa_1',
+                  'sa_12', 'sa_2', 'sa_1', 'ta', 'p']
+
+    for data in data_types:
+        run(data)
