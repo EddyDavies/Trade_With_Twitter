@@ -11,8 +11,6 @@ def get_paths(reset=False,
 
     if model_name:
         model_folder = convert_model_name(model_name)
-    else:
-        model_folder = "distilbert-base-uncased-finetuned"
 
 
     raw_results_folder = f'{crypto}_scores/'
