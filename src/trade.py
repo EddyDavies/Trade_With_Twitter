@@ -30,7 +30,7 @@ def run(data_type, window_size):
     path = RAW_PATH.format(run_type)
     log_path = os.path.join(LOG_FOLDER, f"{run_type}.csv")
 
-    print(f"{data_type} with {window_size} window size")
+    print(f"\n{data_type} with {window_size} window size\n")
 
 
     env = Stonks(
