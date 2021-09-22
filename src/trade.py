@@ -13,7 +13,7 @@ BATCH_SIZE = 5
 TRAIN_EPOCHS = 4
 LR = 0.0001
 
-WINDOW_SIZE = 30
+# WINDOW_SIZE = 30
 HIDDEN_DIMS = 16
 USE_SENTIMENT = False
 
@@ -21,7 +21,8 @@ RAW_PATH = "../data/trade/{}.csv"
 LOG_FOLDER= "../data/trade/logs"
 CRYPTO = "bitcoin"
 
-def run(data_type):
+
+def run(data_type, window_size):
     run_type = f"{CRYPTO}_{data_type}"
     # if len(sys.argv) > 1:
     #     run_type = f"{crypto}{date_types[int(sys.argv[1])]}"
@@ -34,14 +35,14 @@ def run(data_type):
     env = Stonks(
         currency="BTC",
         # use_sentiment=USE_SENTIMENT,
-        window_size=WINDOW_SIZE,
+        window_size=window_size,
         training_dataset_filepath=path
     )
 
     testing_env = Stonks(
         currency="BTC",
         # use_sentiment=USE_SENTIMENT,
-        window_size=WINDOW_SIZE,
+        window_size=window_size,
         testing=True,
         training_dataset_filepath=path
     )
@@ -73,12 +74,15 @@ def run(data_type):
             logger.log(epoch, episode, reward, info["assets"], action, done)
             observation = observation_
 
+
 if __name__ == '__main__':
     if not os.path.exists(LOG_FOLDER):
         os.makedirs(LOG_FOLDER)
 
     data_types = ['ta_sa_12', 'ta_sa_2', 'ta_sa_1',
                   'sa_12', 'sa_2', 'sa_1', 'ta', 'p']
+    sizes = [10, 20, 30]
 
-    for data in data_types:
-        run(data)
+    for window in sizes:
+        for data in data_types:
+            run(data, window)
