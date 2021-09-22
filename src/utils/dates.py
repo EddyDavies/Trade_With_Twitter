@@ -38,10 +38,20 @@ def twitter_date_format_to_time(date: str):
     return time_string
 
 
-def string_to_datetime(date: str):
+def string_to_datetime(date: str, format: str = None):
     # get datetime object from string in '%Y-%m-%d' format
-    return datetime.strptime(date, "%Y-%m-%d")
+    if not format:
+        return datetime.strptime(date, format)
+    else:
+        return datetime.strptime(date, "%Y-%m-%d")
 
+
+def datetime_to_string(date: str, format: str = None):
+    # get datetime object from string in '%Y-%m-%d' format
+    if not format:
+        return datetime.strftime(date, format)
+    else:
+        return datetime.strftime(date, "%Y-%m-%d")
 
 def string_to_month_year(date: str):
     return datetime.strptime(date, "%Y-%m-%d").strftime('%b %y')

@@ -12,6 +12,7 @@ from utils.dates import get_date_array
 def get_dates():
     try:
         dates = os.environ.get("SENTIMENT_DATES").split(" ")
+
         return dates[0], dates[1]
     except:
         return "2019-01-01", "2021-05-31"
