@@ -82,7 +82,7 @@ def meta_data_weight(df, weight=None):
 if __name__ == '__main__':
 
     dates_range = ("2017-01-01", "2021-05-31")
-    dates_range = ("2017-01-01", "2017-02-28")
+    # dates_range = ("2017-01-01", "2017-02-28")
     dates = get_date_array(dates_range)
 
     data_folder = '../data'

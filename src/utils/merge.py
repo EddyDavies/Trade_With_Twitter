@@ -9,11 +9,11 @@ def convert_to_date(date, format='%Y-%m-%d'):
     return datetime.strptime(date, format)
 
 
-def load_date_index(prices_folder, names=None):
+def load_date_index(folder, names=None):
     if names:
-        df = pd.read_csv(prices_folder, names=names)
+        df = pd.read_csv(folder, names=names)
     else:
-        df = pd.read_csv(prices_folder)
+        df = pd.read_csv(folder)
     df['date'] = df["date"].apply(convert_to_date)
 
     pd.to_datetime(df['date'])
@@ -27,31 +27,29 @@ def select_data_type(style, crypto, data_folder, model_names):
 
     prices_folder = os.path.join(data_folder, "market-data", f"{crypto}.csv")
 
-    data = []
     df = load_date_index(prices_folder)
-    df_ta, df_1sa, df_2sa = None, None, None
+    df_ta, df_sa = None, None
 
     if 'ta' in style:
         ta_folder = os.path.join(data_folder, "market-data", f"{crypto}_ta.csv")
         df_ta = load_date_index(ta_folder)
-        data.append(df_ta)
 
+    data = []
     if 'sa' in style:
-        for x, model in enumerate(model_folders):
-            if str(x) in style:
-                sa_folder = os.path.join(data_folder, f"{model_folders[x]}.csv")
-                df_sa = load_date_index(sa_folder)
-                data.append(df_sa)
+        for i, model in enumerate(model_folders):
+            if str(i+1) in style:
+                sa_folder = os.path.join(data_folder, f"{model_folders[i]}.csv")
+                loaded = load_date_index(sa_folder)
+                data.append(loaded)
+        if data is not []:
+            df_sa = pd.concat(data, axis=1)
 
-    df = pd.concat([df, df_1sa, df_2sa, df_ta], axis=1)
+    df = pd.concat([df, df_sa, df_ta], axis=1)
 
     begin = pd.Timestamp('2017-01-01 00:00:00')
     end = pd.Timestamp('2021-05-31 00:00:00')
 
     return df.truncate(before=begin, after=end)
-    # df = df.truncate(before=begin, after=end)
-    # df.reset_index()
-    # df =
 
 
 if __name__ == '__main__':
