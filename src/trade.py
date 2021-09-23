@@ -7,7 +7,7 @@ from rl.utils.epochs import Epochs
 from rl.utils.logger import Logger
 
 
-def run(data_type, window_size, run_type, path, log_folder, show_fig=True):
+def run(data_type, window_size, run_type, path, log_folder, show_fig=False):
     log_path_csv = os.path.join(log_folder, f"{run_type}.csv")
     log_path_jpg = os.path.join(log_folder, f"{run_type}.jpg")
 
@@ -85,6 +85,6 @@ if __name__ == '__main__':
             run_type = f"{CRYPTO}_{data}"
             path = RAW_PATH.format(run_type)
 
-            run(data, window, run_type, path, LOG_FOLDER)
+            run(data, window, run_type, path, LOG_FOLDER, show_fig=True)
 
 

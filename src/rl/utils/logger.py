@@ -8,7 +8,7 @@ class Logger:
             self,
             plot="Training History",
             log_path=None,
-            show_fig=True
+            show_fig=False
     ):
         self.plot = plot
         self.log_path = log_path
