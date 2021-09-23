@@ -1,7 +1,7 @@
 import os
 
 from transformers import pipeline
-from onnx_transformers import pipeline
+# from onnx_transformers import pipeline
 import torch
 
 from sentiment.inference import get_tweets, get_sentiments
