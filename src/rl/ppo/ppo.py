@@ -1,3 +1,5 @@
+import os
+
 import torch
 import numpy as np
 from .network import CriticNetwork, ActorNetwork
@@ -8,16 +10,21 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class PPO:
     def __init__(self, n_actions, input_dims, gamma=0.99, alpha=0.0003, gae_lambda=0.95,
-                 policy_clip=0.2, batch_size=64, n_epochs=10, dims=32):
+                 policy_clip=0.2, batch_size=64, n_epochs=10, dims=32, checkpoint_path=None):
         self.gamma = gamma
         self.policy_clip = policy_clip
         self.n_epochs = n_epochs
         self.gae_lambda = gae_lambda
-        self.actor = ActorNetwork(n_actions, input_dims, alpha, units=dims)
-        self.critic = CriticNetwork(input_dims, alpha, units=dims)
+        self.actor = ActorNetwork(n_actions, input_dims, alpha, units=dims, checkpoint_path=checkpoint_path)
+        self.critic = CriticNetwork(input_dims, alpha, units=dims, checkpoint_path=checkpoint_path)
         self.memory = PPOMemory(batch_size)
         self.__learn_steps = 0
         self.n_learn_steps = 20
+
+        if checkpoint_path:
+            checkpoint_folder = '/'.join(checkpoint_path.split('/')[:-1])
+            if not os.path.exists(checkpoint_folder):
+                os.makedirs(checkpoint_folder)
 
     def remember(self, state, action, probs, vals, reward, done):
         self.memory.store_memory(state, action, probs, vals, reward, done)

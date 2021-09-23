@@ -20,6 +20,7 @@ USE_SENTIMENT = False
 RAW_PATH = "../data/trade/{}.csv"
 LOG_FOLDER= "../data/trade/logs"
 CRYPTO = "bitcoin"
+CHECKPOINT_PATH = "../data/checkpoints/{}_{}.json"
 
 
 def run(data_type, window_size):
@@ -56,7 +57,8 @@ def run(data_type, window_size):
         batch_size=BATCH_SIZE,
         alpha=LR,
         n_epochs=TRAIN_EPOCHS,
-        dims=HIDDEN_DIMS
+        dims=HIDDEN_DIMS,
+        checkpoint_path=CHECKPOINT_PATH.format(data_type, window_size)
     )
 
     logger = Logger(plot=f" Trading with {run_type} ↗")
@@ -80,10 +82,12 @@ if __name__ == '__main__':
     if not os.path.exists(LOG_FOLDER):
         os.makedirs(LOG_FOLDER)
 
-    data_types = ['ta_sa_12', 'ta_sa_2', 'ta_sa_1',
-                  'sa_12', 'sa_2', 'sa_1', 'ta', 'p']
-    sizes = [10, 20, 30]
+    # data_types = ['ta_sa_12', 'ta_sa_2', 'ta_sa_1',
+    #               'sa_12', 'sa_2', 'sa_1', 'ta', 'p']
+    # sizes = [10, 20, 30]
+    #
+    # for window in sizes:
+    #     for data in data_types:
+    #         run(data, window)
 
-    for window in sizes:
-        for data in data_types:
-            run(data, window)
+    run('ta', 10)
