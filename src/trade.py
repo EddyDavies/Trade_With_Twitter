@@ -7,8 +7,10 @@ from rl.utils.epochs import Epochs
 from rl.utils.logger import Logger
 
 
-def run(data_type, window_size, run_type, path, log_path):
-    
+def run(data_type, window_size, run_type, path, log_folder, show_fig=True):
+    log_path_csv = os.path.join(log_folder, f"{run_type}.csv")
+    log_path_jpg = os.path.join(log_folder, f"{run_type}.jpg")
+
     print(f"\n{data_type} with {window_size} window size\n")
 
     env = Stonks(
@@ -38,9 +40,9 @@ def run(data_type, window_size, run_type, path, log_path):
         checkpoint_path=CHECKPOINT_PATH.format(data_type, window_size)
     )
 
-    logger = Logger(plot=f" Trading with {run_type} ↗")
+    logger = Logger(plot=f" Trading with {run_type} ↗", log_path=log_path_jpg, show_fig=show_fig)
     testing_callback = TestOnEpochEndCallback(testing_env, agent, render=False, action=lambda a: a[0])
-    saving_callback = SaveLoggerCallback(logger, log_path)
+    saving_callback = SaveLoggerCallback(logger, log_path_csv)
 
     for epoch, episode in Epochs(50, 25, callbacks=[testing_callback, saving_callback]):
         observation = env.reset()
@@ -82,8 +84,7 @@ if __name__ == '__main__':
         for data in data_types:
             run_type = f"{CRYPTO}_{data}"
             path = RAW_PATH.format(run_type)
-            log_path = os.path.join(LOG_FOLDER, f"{run_type}.csv")
 
-            run(data, window, run_type, path, log_path)
+            run(data, window, run_type, path, LOG_FOLDER)
 
 

@@ -6,9 +6,13 @@ import matplotlib.pyplot as plt
 class Logger:
     def __init__(
             self,
-            plot="Training History"
+            plot="Training History",
+            log_path=None,
+            show_fig=True
     ):
         self.plot = plot
+        self.log_path = log_path
+        self.show_fig = show_fig
         self.fig = None
         self.__history = []
 
@@ -83,7 +87,10 @@ class Logger:
         if self.plot not in [False, None, 0]:
             if self.fig is None:
                 self.fig = plt.figure(figsize=(5, 3))
-                self.fig.show()
+                if self.show_fig:
+                    self.fig.show()
+                if self.log_path:
+                    self.fig.savefig(self.log_path)
 
             xs = [i + 1 for i in range(len(self.__history))]
             mins = [log["min"] for log in self.__history]
