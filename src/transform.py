@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     model_name = "siebert/sentiment-roberta-large-english"
     # sentiment_analysis = pipeline("sentiment-analysis", model=model_name, device=device)
-    sentiment_analysis = pipeline("sentiment-analysis", model=model_name, onnx=True, device=device)
+    sentiment_analysis = pipeline("sentiment-analysis", model=model_name, device=device)
 
     results_folder, source = get_paths(reset=True)
 
