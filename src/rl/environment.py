@@ -24,10 +24,16 @@ class Stonks:
             use_sentiment: Optional[bool] = True,
             testing=False,
             window_size=10,
+            no_window: list = []
     ):
         # The shape of the state returned at each time step and the number of actions the agent can make
         # self.observation_shape = ((window_size * 2) + 1) if use_sentiment else (window_size + 1),
-        self.observation_shape = (window_size * len(list(pd.read_csv(training_dataset_filepath).columns)[1:]))+1
+        # self.observation_shape = (window_size * len(list(pd.read_csv(training_dataset_filepath).columns)[1:]))+1
+        self.window_size = window_size
+        self.no_window = no_window
+        self.number_of_vars = len(list(pd.read_csv(training_dataset_filepath).columns))-1
+
+        self.observation_shape = (self.window_size * (self.number_of_vars - len(self.no_window))) + len(self.no_window) + 1
         self.actions = 3
 
         self.training_dataset_filepath = training_dataset_filepath
@@ -40,7 +46,6 @@ class Stonks:
         self._step = 0
         self.__end_step = 0
 
-        self.window_size = window_size
 
         # Store the name of the currency and a dataframe for the data.
         self.currency: Optional[str] = None
@@ -172,10 +177,16 @@ class Stonks:
         # Add an int to describe whether we've invested
         observations = []
         names = self.data.columns
+        no_window = self.no_window
+
         for name in names:
-            obvs = self.data[name][self._step - self.window_size:self._step].to_numpy().copy()
-            # obvs = self.data[name][self._step].copy()
+            if name.replace(" ", "") in no_window:
+                obvs = [self.data[name][self._step]]
+            else:
+                obvs = self.data[name][self._step - self.window_size:self._step].to_numpy().copy()
+                # obvs = self.data[name][self._step].copy()
             observations.append(obvs)
+
 
         # col = self.data["percent_change_close"]
         # window_value = self.data["percent_change_close"][self._step - self.window_size:self._step].to_numpy().copy()

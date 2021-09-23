@@ -7,17 +7,38 @@ from rl.utils.epochs import Epochs
 from rl.utils.logger import Logger
 
 
-def run(data_type, window_size, run_type, path, checkpoint_path, log_folder, show_fig=False):
+def run(data_type,
+        window_size,
+        run_type,
+        path,
+        checkpoint_path,
+        log_folder,
+        no_window: list = [],
+        show_fig=False
+    ):
+
+    if no_window is not []:
+        run_type += "no_window"
     log_path_csv = os.path.join(log_folder, f"{run_type}.csv")
     log_path_jpg = os.path.join(log_folder, f"{run_type}.jpg")
 
-    print(f"\n{data_type} with {window_size} window size\n")
+    print(f"\n{data_type} with {window_size} window size for all except {no_window}\n")
+
+    if "1" not in run_type:
+        no_window.remove('pos1')
+        no_window.remove('neg1')
+
+    if "2" not in run_type:
+        no_window.remove('pos2')
+        no_window.remove('neg2')
+
 
     env = Stonks(
         currency="BTC",
         # use_sentiment=USE_SENTIMENT,
         window_size=window_size,
-        training_dataset_filepath=path
+        training_dataset_filepath=path,
+        no_window=no_window
     )
 
     testing_env = Stonks(
@@ -25,7 +46,8 @@ def run(data_type, window_size, run_type, path, checkpoint_path, log_folder, sho
         # use_sentiment=USE_SENTIMENT,
         window_size=window_size,
         testing=True,
-        training_dataset_filepath=path
+        training_dataset_filepath=path,
+        no_window=no_window
     )
 
     # print(f"{'No ' if not USE_SENTIMENT else ''}Sentiment")
@@ -75,17 +97,21 @@ if __name__ == '__main__':
     if not os.path.exists(LOG_FOLDER):
         os.makedirs(LOG_FOLDER)
 
-    data_types = ['ta_sa_12', 'ta_sa_2', 'ta_sa_1',
+    data_types = ['sa_1',
+        'ta_sa_12', 'ta_sa_2', 'ta_sa_1',
                   'sa_12', 'sa_2', 'sa_1', 'ta', 'p']
     sizes = [10, 20, 30]
-    sizes = [30]
+    sizes = [10]
     #
     for window in sizes:
         for data in data_types:
+            no_window = ['pos1', 'neg1', 'pos2', 'neg2']
             run_type = f"{CRYPTO}_{data}"
             path = RAW_PATH.format(run_type)
             checkpoint_path = CHECKPOINT_PATH.format(data, window)
 
-            run(data, window, run_type, path, checkpoint_path, LOG_FOLDER, show_fig=True)
+            run(data, window, run_type,
+                path, checkpoint_path, LOG_FOLDER,
+                no_window=no_window, show_fig=True)
 
 
