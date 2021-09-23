@@ -25,6 +25,8 @@ class SaveAgentCallback(EpochCallback):
 
     def on_epoch_end(self, e):
         save(self.file_name(e) if type(self.file_name) != str else self.file_name)
+        self.__agent.save_models()
+
 
 
 class TestOnEpochEndCallback(EpochCallback):
