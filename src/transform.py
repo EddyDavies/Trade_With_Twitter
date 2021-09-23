@@ -29,7 +29,7 @@ if __name__ == '__main__':
     # sentiment_analysis = pipeline("sentiment-analysis", model=model_name, device=device, onnx=True)
     sentiment_analysis = pipeline("sentiment-analysis", model=model_name, device=device)
 
-    results_folder, source = get_paths(reset=True)
+    results_folder, source = get_paths(reset=True, model_name=model_name)
 
     for date in dates:
         try:
