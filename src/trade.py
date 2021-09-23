@@ -7,7 +7,8 @@ from rl.utils.epochs import Epochs
 from rl.utils.logger import Logger
 
 
-def run(data_type, window_size, run_type):
+def run(data_type, window_size, run_type, path, log_path):
+    
     print(f"\n{data_type} with {window_size} window size\n")
 
     env = Stonks(
