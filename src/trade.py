@@ -7,7 +7,7 @@ from rl.utils.epochs import Epochs
 from rl.utils.logger import Logger
 
 
-def run(data_type, window_size, run_type, path, log_folder, show_fig=False):
+def run(data_type, window_size, run_type, path, checkpoint_path, log_folder, show_fig=False):
     log_path_csv = os.path.join(log_folder, f"{run_type}.csv")
     log_path_jpg = os.path.join(log_folder, f"{run_type}.jpg")
 
@@ -37,7 +37,7 @@ def run(data_type, window_size, run_type, path, log_folder, show_fig=False):
         alpha=LR,
         n_epochs=TRAIN_EPOCHS,
         dims=HIDDEN_DIMS,
-        checkpoint_path=CHECKPOINT_PATH.format(data_type, window_size)
+        checkpoint_path=checkpoint_path
     )
 
     logger = Logger(plot=f" Trading with {run_type} ↗", log_path=log_path_jpg, show_fig=show_fig)
@@ -84,7 +84,8 @@ if __name__ == '__main__':
         for data in data_types:
             run_type = f"{CRYPTO}_{data}"
             path = RAW_PATH.format(run_type)
+            checkpoint_path = CHECKPOINT_PATH.format(data, window)
 
-            run(data, window, run_type, path, LOG_FOLDER, show_fig=True)
+            run(data, window, run_type, path, checkpoint_path, LOG_FOLDER, show_fig=True)
 
 
