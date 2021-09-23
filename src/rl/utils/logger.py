@@ -86,7 +86,7 @@ class Logger:
     def __plot(self):
         if self.plot not in [False, None, 0]:
             if self.fig is None:
-                self.fig = plt.figure(figsize=(5, 3))
+                self.fig = plt.figure(figsize=(5, 3), frameon=self.show_fig)
                 if self.show_fig:
                     self.fig.show()
                 if self.log_path:
