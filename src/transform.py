@@ -26,7 +26,7 @@ if __name__ == '__main__':
     device = 0 if torch.cuda.is_available() else -1
 
     model_name = "siebert/sentiment-roberta-large-english"
-    # sentiment_analysis = pipeline("sentiment-analysis", model=model_name, device=device)
+    # sentiment_analysis = pipeline("sentiment-analysis", model=model_name, device=device, onnx=True)
     sentiment_analysis = pipeline("sentiment-analysis", model=model_name, device=device)
 
     results_folder, source = get_paths(reset=True)
