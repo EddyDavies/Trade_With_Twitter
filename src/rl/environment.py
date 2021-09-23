@@ -11,7 +11,6 @@ STOCKS = [
     # "INTC",
 ]
 
-PATH = "../data/test/{}.csv"
 HOLD, BUY, SELL = 0, 1, 2
 
 

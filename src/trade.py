@@ -6,33 +6,9 @@ from rl.utils.callbacks import TestOnEpochEndCallback, SaveLoggerCallback
 from rl.utils.epochs import Epochs
 from rl.utils.logger import Logger
 
-import sys
 
-LEARN_STEPS = 20
-BATCH_SIZE = 5
-TRAIN_EPOCHS = 4
-LR = 0.0001
-
-# WINDOW_SIZE = 30
-HIDDEN_DIMS = 16
-USE_SENTIMENT = False
-
-RAW_PATH = "../data/trade/{}.csv"
-LOG_FOLDER= "../data/trade/logs"
-CRYPTO = "bitcoin"
-CHECKPOINT_PATH = "../data/checkpoints/{}_{}.json"
-
-
-def run(data_type, window_size):
-    run_type = f"{CRYPTO}_{data_type}"
-    # if len(sys.argv) > 1:
-    #     run_type = f"{crypto}{date_types[int(sys.argv[1])]}"
-
-    path = RAW_PATH.format(run_type)
-    log_path = os.path.join(LOG_FOLDER, f"{run_type}.csv")
-
+def run(data_type, window_size, run_type):
     print(f"\n{data_type} with {window_size} window size\n")
-
 
     env = Stonks(
         currency="BTC",
@@ -77,17 +53,36 @@ def run(data_type, window_size):
             logger.log(epoch, episode, reward, info["assets"], action, done)
             observation = observation_
 
+LEARN_STEPS = 20
+BATCH_SIZE = 5
+TRAIN_EPOCHS = 4
+LR = 0.0001
+
+# WINDOW_SIZE = 30
+HIDDEN_DIMS = 16
+USE_SENTIMENT = False
+
+RAW_PATH = "../data/trade/{}.csv"
+LOG_FOLDER= "../data/trade/logs"
+CRYPTO = "bitcoin"
+CHECKPOINT_PATH = "../data/checkpoints/{}_{}.json"
+
 
 if __name__ == '__main__':
     if not os.path.exists(LOG_FOLDER):
         os.makedirs(LOG_FOLDER)
 
-    # data_types = ['ta_sa_12', 'ta_sa_2', 'ta_sa_1',
-    #               'sa_12', 'sa_2', 'sa_1', 'ta', 'p']
-    # sizes = [10, 20, 30]
+    data_types = ['ta_sa_12', 'ta_sa_2', 'ta_sa_1',
+                  'sa_12', 'sa_2', 'sa_1', 'ta', 'p']
+    sizes = [10, 20, 30]
+    sizes = [30]
     #
-    # for window in sizes:
-    #     for data in data_types:
-    #         run(data, window)
+    for window in sizes:
+        for data in data_types:
+            run_type = f"{CRYPTO}_{data}"
+            path = RAW_PATH.format(run_type)
+            log_path = os.path.join(LOG_FOLDER, f"{run_type}.csv")
 
-    run('ta', 10)
+            run(data, window, run_type, path, log_path)
+
+
