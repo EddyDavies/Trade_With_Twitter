@@ -68,7 +68,7 @@ USE_SENTIMENT = False
 RAW_PATH = "../data/trade/{}.csv"
 LOG_FOLDER= "../data/trade/logs"
 CRYPTO = "bitcoin"
-CHECKPOINT_PATH = "../data/checkpoints/{}_{}.json"
+CHECKPOINT_PATH = "../data/checkpoints/{}_{}.pt"
 
 
 if __name__ == '__main__':
