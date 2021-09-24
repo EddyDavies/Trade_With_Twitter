@@ -18,9 +18,11 @@ def run(data_type,
     ):
 
     if no_window is not []:
-        run_type += "no_window"
+        run_type += "_no_window"
     log_path_csv = os.path.join(log_folder, f"{run_type}.csv")
     log_path_jpg = os.path.join(log_folder, f"{run_type}.jpg")
+
+    checkpoint_path = checkpoint_path.format(run_type, window)
 
     print(f"\n{data_type} with {window_size} window size for all except {no_window}\n")
 
@@ -66,10 +68,15 @@ def run(data_type,
     testing_callback = TestOnEpochEndCallback(testing_env, agent, render=False, action=lambda a: a[0])
     saving_callback = SaveLoggerCallback(logger, log_path_csv)
 
+    current_epoch = 1
     for epoch, episode in Epochs(50, 25, callbacks=[testing_callback, saving_callback]):
         observation = env.reset()
         done = False
         while not done:
+            if current_epoch != epoch:
+                current_epoch = epoch
+                agent.save_models()
+
             action, prob, val = agent.choose_action(observation)
 
             observation_, reward, done, info = env.step(action)
@@ -77,6 +84,7 @@ def run(data_type,
             agent.remember(observation, action, prob, val, reward, done)
             logger.log(epoch, episode, reward, info["assets"], action, done)
             observation = observation_
+
 
 LEARN_STEPS = 20
 BATCH_SIZE = 5
@@ -108,10 +116,9 @@ if __name__ == '__main__':
             no_window = ['pos1', 'neg1', 'pos2', 'neg2']
             run_type = f"{CRYPTO}_{data}"
             path = RAW_PATH.format(run_type)
-            checkpoint_path = CHECKPOINT_PATH.format(data, window)
 
             run(data, window, run_type,
-                path, checkpoint_path, LOG_FOLDER,
+                path, CHECKPOINT_PATH, LOG_FOLDER,
                 no_window=no_window, show_fig=True)
 
 
