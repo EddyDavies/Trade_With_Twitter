@@ -22,7 +22,7 @@ def run(data_type,
     log_path_csv = os.path.join(log_folder, f"{run_type}.csv")
     log_path_jpg = os.path.join(log_folder, f"{run_type}.jpg")
 
-    checkpoint_path = checkpoint_path.format(run_type, window)
+    checkpoint_path = checkpoint_path.format(run_type, window_size)
 
     print(f"\n{data_type} with {window_size} window size for all except {no_window}\n")
 
@@ -110,7 +110,7 @@ if __name__ == '__main__':
                   'sa_12', 'sa_2', 'sa_1', 'ta', 'p']
     sizes = [10, 20, 30]
     sizes = [10]
-    #
+
     for window in sizes:
         for data in data_types:
             no_window = ['pos1', 'neg1', 'pos2', 'neg2']
