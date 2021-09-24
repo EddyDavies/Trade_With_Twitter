@@ -95,10 +95,10 @@ LR = 0.0001
 HIDDEN_DIMS = 16
 USE_SENTIMENT = False
 
+CHECKPOINT_PATH = "../data/checkpoints/{}_{}.pt"
 RAW_PATH = "../data/trade/{}.csv"
 LOG_FOLDER= "../data/trade/logs"
 CRYPTO = "bitcoin"
-CHECKPOINT_PATH = "../data/checkpoints/{}_{}.pt"
 
 
 if __name__ == '__main__':
