@@ -1,7 +1,49 @@
 import calendar
 import os
 from datetime import datetime, timedelta, timezone
-from typing import List
+from typing import List, Generator
+from dataclasses import dataclass
+
+from pydantic import BaseModel
+
+
+
+@dataclass
+class SimpleDate:
+    year: int
+    month: int
+    day: int
+
+    def to_string(self) -> str:
+        return self.to_datetime().strftime("%Y-%m-%d")
+
+    def to_datetime(self) -> datetime:
+        return datetime(year=self.year, month=self.month, day=self.day)
+
+    @staticmethod
+    def from_datetime(date: datetime) -> 'SimpleDate':
+        return SimpleDate(date.year, date.month, date.day)
+
+
+class TimePeriod(BaseModel):
+    begin_datetime: datetime
+    end_datetime: datetime
+
+    def is_date_within_time_period(self, date: datetime) -> bool:
+        return self.begin_datetime <= date < self.end_datetime
+
+    def dates_within_range(self) -> List[SimpleDate]:
+        return [SimpleDate.from_datetime(date)
+                for date in self._date_generator(self.begin_datetime, self.end_datetime)]
+
+    @staticmethod
+    def _date_generator(begin_date: datetime, end_date: datetime) -> Generator[datetime, None, None]:
+        curr_date = begin_date
+        yield curr_date
+        while curr_date < end_date:
+            next_date = curr_date + timedelta(days=1)
+            yield next_date
+            curr_date = next_date
 
 
 def twitter_date_format(date: str, time_string=None, end_of_day=False):
