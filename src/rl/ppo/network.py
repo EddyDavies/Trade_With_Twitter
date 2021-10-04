@@ -35,7 +35,7 @@ class ActorNetwork(nn.Module):
         torch.save(self.actor.state_dict(), self.checkpoint_path)
 
     def load_checkpoint(self):
-        self.agent.load_state_dict(torch.load(self.checkpoint_path))
+        self.actor.load_state_dict(torch.load(self.checkpoint_path))
 
 
 class CriticNetwork(nn.Module):

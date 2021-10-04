@@ -14,7 +14,8 @@ def run(data_type,
         checkpoint_path,
         log_folder,
         no_window: list = [],
-        show_fig=False
+        show_fig=False,
+        load_model=False
     ):
 
     if no_window is not []:
@@ -23,6 +24,7 @@ def run(data_type,
     log_path_jpg = os.path.join(log_folder, f"{run_type}.jpg")
 
     checkpoint_path = checkpoint_path.format(run_type, window_size)
+
 
     print(f"\n{data_type} with {window_size} window size for all except {no_window}\n")
 
@@ -63,6 +65,9 @@ def run(data_type,
         dims=HIDDEN_DIMS,
         checkpoint_path=checkpoint_path
     )
+
+    # if load_model:
+    #     agent.load_models()
 
     logger = Logger(plot=f" Trading with {run_type} ↗", log_path=log_path_jpg, show_fig=show_fig)
     testing_callback = TestOnEpochEndCallback(testing_env, agent, render=False, action=lambda a: a[0])
@@ -105,20 +110,25 @@ if __name__ == '__main__':
     if not os.path.exists(LOG_FOLDER):
         os.makedirs(LOG_FOLDER)
 
-    data_types = ['sa_1',
-        'ta_sa_12', 'ta_sa_2', 'ta_sa_1',
-                  'sa_12', 'sa_2', 'sa_1', 'ta', 'p']
+    data_types = ['ta_sa_1',
+        # 'ta_sa_12', 'ta_sa_2', 'ta_sa_1',
+        #           'sa_12', 'sa_2', 'sa_1', 'ta', 'p'
+                  ]
     sizes = [10, 20, 30]
     sizes = [10]
 
     for window in sizes:
         for data in data_types:
-            no_window = ['pos1', 'neg1', 'pos2', 'neg2']
+            no_window = ['pos1', 'neg1', 'pos2', 'neg2',
+            "SMA_50", "SMA_200", "BBL_20_2.0", "BBM_20_2.0", "BBU_20_2.0", "BBB_20_2.0",
+             "BBP_20_2.0", "RSI_14", "MACD_8_21_9", "MACDh_8_21_9", "MACDs_8_21_9", "VOLUME_SMA_20"]
+
             run_type = f"{CRYPTO}_{data}"
             path = RAW_PATH.format(run_type)
 
             run(data, window, run_type,
                 path, CHECKPOINT_PATH, LOG_FOLDER,
-                no_window=no_window, show_fig=True)
+                no_window=no_window, show_fig=True,
+                load_model=True)
 
 
