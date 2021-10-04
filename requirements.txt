@@ -3,6 +3,7 @@
 # jupyter
 # transformers==4.6.1
 # torch==1.8.0
+pydantic
 pandas
 pandas-ta
 yfinance
