@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 from normaliser import normalizeTweet
-from twitter.mongo import dbs, months
+from twitter.mongo import db, months
 from utils.dates import get_date_array, get_date_range, string_to_month_year
 
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
             print(f"{day} already saved.")
         else:
             # Collect all the tweets for the given day
-            data = find_days_docs(day, dbs[1])
+            data = find_days_docs(day, db)
 
             for tweet in data:
                 tweet_text = normalizeTweet(tweet["text"])

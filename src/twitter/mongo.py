@@ -1,33 +1,42 @@
 import os
+from typing import List, Optional
 
 from pymongo import MongoClient
+from pydantic import BaseSettings, Field
 
 
-def extract_env_vars():
+class MongoSettings(BaseSettings):
+    # Get the mongo client link and database name
+    db_name = "bitcoin"
+    url: str
+    user = Optional[str]
+    pwd = Optional[str]
+
+    # Get mongo client item using username and password if present
+    if user:
+        url = url.split("://")[0] + "://%s:%s@" + url.split("://")[1]
+        url = url % (user, pwd)
+    client = MongoClient(url % (user, pwd))
+    db = client[db_name]
+
+    class Config:
+        env_prefix = 'mongo_'
+        fields = {
+            'url': {
+                'env': ['MONGO_CLIENT', 'MONGO_CLIENT_DOWNLOAD'],
+            }
+        }
+
+
+class RunSettings(BaseSettings):
+    twitter_date: List[str]
+
     # Get list of dates specified in env vars
     m = os.environ.get("TWITTER_DATE", "Apr 17 Aug 17").split(" ")
-    months_list = list(map(' '.join, zip(m[::2], m[1::2])))
-
-    # Get the mongo client link with user and password
-    mongo_url = os.environ.get('MONGO_CLIENT_DOWNLOAD', "mongodb://127.0.0.1:2700")
-    mongo_user = os.environ.get('MONGO_USER')
-    mongo_pwd = os.environ.get('MONGO_PWD')
-    # Get mongo client item using username and password if present
-    if mongo_user is None:
-        mongo = MongoClient(mongo_url)
-    else:
-        mongo_url = mongo_url.split("://")[0] + "://%s:%s@" + mongo_url.split("://")[1]
-        mongo = MongoClient(mongo_url % (mongo_user, mongo_pwd))
-    print(mongo_url)
-
-    dbnames = os.environ.get('DBNAMES', "bitcoin ethereum").split(" ")
-    dbs = [mongo["shared"]]
-    for name in dbnames:
-        dbs.append(mongo[name])
-
-    print(f"Date: {months_list[0]} to {months_list[-1]}  DBNames: {dbnames}")
-
-    return months_list, dbs, mongo["bitcoin"], mongo
+    months = list(map(' '.join, zip(m[::2], m[1::2])))
 
 
-months, dbs, db, mongo = extract_env_vars()
+months, db, mongo = RunSettings.months, MongoSettings.db, MongoSettings.client
+
+print(MongoSettings.url)
+print(f"Date: {RunSettings.months[0]} to {RunSettings.months[-1]}  DBNames: {MongoSettings.db_name}")
